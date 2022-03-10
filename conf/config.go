@@ -34,7 +34,7 @@ type MyConfig struct {
 // 读取配置并绑定结构体
 func (m *MyConfig) getMyConfig() *MyConfig {
 	// 读取yaml文件到缓存
-	yamlFile, err := ioutil.ReadFile("config.yaml")
+	yamlFile, err := ioutil.ReadFile("uper.yaml")
 	if err != nil {
 		fmt.Println("没有找到配置文件：", err)
 	}

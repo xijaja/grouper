@@ -17,18 +17,25 @@ import (
 func GetFileList(path string, up func(newPath string)) {
 	// 获取路径
 	fs, _ := ioutil.ReadDir(path)
-	// 固定的path
-	if path[len(path)-1:] != "/" {
-		path += "/"
-	}
-	// 执行上传
-	for _, file := range fs {
-		if file.IsDir() {
-			// 遇到文件夹时就开启一个并发递归
-			go GetFileList(path+file.Name()+"/", up)
-		} else {
-			newPath := path + file.Name()
-			up(newPath) // 调用函数参数
+
+	// 判断上传文件的类型，然后执行上传
+	if path[len(path)-4:] == ".zip" {
+		// 是压缩包
+		up(path)
+	} else {
+		// 增加后缀
+		if path[len(path)-1:] != "/" {
+			path += "/"
+		}
+		// 是文件夹
+		for _, file := range fs {
+			if file.IsDir() {
+				// 遇到文件夹时就开启一个并发递归
+				go GetFileList(path+file.Name()+"/", up)
+			} else {
+				newPath := path + file.Name()
+				up(newPath) // 调用函数参数
+			}
 		}
 	}
 }

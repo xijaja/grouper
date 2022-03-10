@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 	"upauto/conf"
+	"upauto/osser"
 	"upauto/tool"
 )
 
@@ -16,7 +17,6 @@ var N = flag.String("n", "", "name 项目名称，请使用小写字母开头不
 func init() {
 	// 解析命令行参数
 	flag.Parse()
-	fmt.Println(conf.Cfg.AliyunOss)
 }
 
 // 程序入口
@@ -28,21 +28,25 @@ func main() {
 	// 检查命名是否符合规范，文件夹是否存在
 	tool.NameStyle(*N, dirPth)
 
-	var total int // 文件总数
-	// bucket := osser.AliyunGetBucket() // 阿里云，获取一个桶子
+	var total int                     // 文件总数
+	bucket := osser.AliyunGetBucket() // 阿里云，获取一个桶子
 	// 开始上传，只遍历本地指定的文件夹
 	tool.GetFileList(dirPth, func(newPath string) {
 		couldFile, localFile := name+newPath[len(dirPth):], newPath
-		fmt.Println(localFile, " -> ", couldFile)
 		// 上传程序
-		// osser.AliyunGoUpload(bucket, couldFile, localFile) // 阿里云
-		total += 1
+		ok := osser.AliyunGoUpload(bucket, couldFile, localFile) // 阿里云
+		if ok {
+			fmt.Println("上传成功：", localFile, " -> ", couldFile)
+			total += 1
+		} else {
+			fmt.Println("⚠️ 上传失败：", localFile, " -> ", couldFile)
+		}
 	})
 
 JUDG:
 	// 检测是否执行完毕
 	agoTotal := total
-	time.Sleep(1 * time.Second)
+	time.Sleep(2 * time.Second)
 	if agoTotal == total {
 		goto OVER // 结束
 	} else {
