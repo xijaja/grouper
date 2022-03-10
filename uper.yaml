@@ -1,0 +1,15 @@
+# 配置文件
+# ---------------------------------------------
+# 阿里云oss配置
+aliyun_oss:
+  endpoint: ""     # 地域节点地址
+  key_id: ""       # oss的key
+  key_secret: ""   # oss的secret
+  bucket_name: ""  # 存储桶的名字
+  visit_addr: ""   # 访问地址
+
+# 七牛云oss配置（还没有完成，暂时不可用）
+qiniu_oss:
+  access_key: ""  # ak
+  secret_key: ""  # sk
+  bucket_name: "" # 桶名
