@@ -24,23 +24,15 @@ func main() {
 	// 读取启动参数
 	dirPth := fmt.Sprintf("%v/%v", *V, *N) // 本地路径
 	name := *N                             // 云端文件名
+	tool.NameStyle(*N, dirPth)             // 检查命名是否符合规范，文件夹是否存在
 
-	// 检查命名是否符合规范，文件夹是否存在
-	tool.NameStyle(*N, dirPth)
-
-	var total int                     // 文件总数
-	bucket := osser.AliyunGetBucket() // 阿里云，获取一个桶子
+	var total int            // 文件总数
+	cos := osser.CosClient() // 腾讯云cos句柄
 	// 开始上传，只遍历本地指定的文件夹
 	tool.GetFileList(dirPth, func(newPath string) {
 		couldFile, localFile := name+newPath[len(dirPth):], newPath
-		// 上传程序
-		ok := osser.AliyunGoUpload(bucket, couldFile, localFile) // 阿里云
-		if ok {
-			fmt.Println("上传成功：", localFile, " -> ", couldFile)
-			total += 1
-		} else {
-			fmt.Println("⚠️ 上传失败：", localFile, " -> ", couldFile)
-		}
+		fmt.Println("上传成功：", localFile, " -> ", couldFile)
+		osser.CosUpload(cos, couldFile, localFile)
 	})
 
 JUDG:
