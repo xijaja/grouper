@@ -32,7 +32,10 @@ func main() {
 	tool.GetFileList(dirPth, func(newPath string) {
 		couldFile, localFile := name+newPath[len(dirPth):], newPath
 		fmt.Println("上传成功：", localFile, " -> ", couldFile)
-		osser.CosUpload(cos, couldFile, localFile)
+		ok := osser.CosUpload(cos, couldFile, localFile)
+		if ok {
+			total += 1
+		} // 计数
 	})
 
 JUDG:

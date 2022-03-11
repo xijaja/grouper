@@ -29,7 +29,7 @@ func CosClient() (client *cos.Client) {
 	return client
 }
 
-func CosUpload(client *cos.Client, key, file string) {
+func CosUpload(client *cos.Client, key, file string) (ok bool) {
 	// 上传配置
 	opt := &cos.MultiUploadOptions{
 		ThreadPoolSize: 1024,
@@ -42,4 +42,5 @@ func CosUpload(client *cos.Client, key, file string) {
 	if err != nil {
 		panic(err)
 	}
+	return true
 }
