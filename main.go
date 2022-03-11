@@ -9,20 +9,28 @@ import (
 	"upauto/tool"
 )
 
-// V N 启动参数
-var V = flag.String("v", ".", "文件夹的路径，需为绝对路径，默认当前目录")
+// W N 启动参数
+var W = flag.String("w", ".", "文件夹的路径，需为绝对路径，默认当前目录")
 var N = flag.String("n", "", "name 项目名称，请使用小写字母开头不含特殊符号")
 
 // 初始化
 func init() {
+	// 版本信息
+	var printVersion bool
+	flag.BoolVar(&printVersion, "v", false, "显示出版本信息")
+	flag.BoolVar(&printVersion, "version", false, "显示出版本信息")
 	// 解析命令行参数
 	flag.Parse()
+	if printVersion {
+		conf.Version()
+	}
 }
 
 // 程序入口
 func main() {
+	fmt.Printf("example for print version")
 	// 读取启动参数
-	dirPth := fmt.Sprintf("%v/%v", *V, *N) // 本地路径
+	dirPth := fmt.Sprintf("%v/%v", *W, *N) // 本地路径
 	name := *N                             // 云端文件名
 	tool.NameStyle(*N, dirPth)             // 检查命名是否符合规范，文件夹是否存在
 

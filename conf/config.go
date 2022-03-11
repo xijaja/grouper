@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
+	"os"
 )
 
 // Cfg 声明配置
@@ -63,4 +64,15 @@ func Addr(name string) (addr string) {
 	} else {
 		return address + name
 	}
+}
+
+// Version 版本信息
+func Version() {
+	fmt.Println("版本号：v1.0-20210311")
+	fmt.Println("开发者：習武（公众号：逆天思维产品汪）")
+	fmt.Println("使用说明：xxx.xxx")
+	fmt.Println("Github地址：https://github.com/xiwuou/uper")
+	fmt.Println("感谢Star 🌟  欢迎Fork 👏")
+	// 退出程序
+	os.Exit(0)
 }
