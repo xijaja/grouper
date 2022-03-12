@@ -6,6 +6,10 @@ import (
 	"io/ioutil"
 )
 
+// ---------------------------------------------
+// 配置信息
+// ---------------------------------------------
+
 // Cfg 声明配置
 var Cfg *MyConfig
 
@@ -17,7 +21,8 @@ func init() {
 
 // MyConfig 配置文件结构体
 type MyConfig struct {
-	RootVisit  string `yaml:"root_visit"`
+	UpType     string `yaml:"up_type"`    // 上传服务类型
+	RootVisit  string `yaml:"root_visit"` // 访问地址
 	TencentCos struct {
 		BucketName string `yaml:"bucket_name"` // 桶名
 		CosRegion  string `yaml:"cos_region"`  // 区域

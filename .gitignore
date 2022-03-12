@@ -6,6 +6,12 @@
 # 开发者的配置文件
 *.yml
 *.yaml
+uper.yaml
 
 # 忽略任何测试文件
 *_test.go
+
+# 忽略生成的文件
+*.syso
+*.exe
+uper

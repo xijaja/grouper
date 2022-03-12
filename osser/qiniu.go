@@ -5,23 +5,29 @@ import (
 	"fmt"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
+	"upauto/conf"
 )
 
-func QiniuGetUpToken() (upToken string) {
-	accessKey := "ZIj1s4Zj2i3djw8V90hI3zcL-YAe_9Ro2m43jdXq"
-	secretKey := "BHY0QD2cejnoO_ACxGVsaT3db_aalrmAnv0gaQcJ"
-	bucket := "myprd"
+type qiniuOss struct {
+	upToken string
+}
+
+// QiniuGetUpToken 获取上传token
+func QiniuGetUpToken() *qiniuOss {
+	// 获取配置信息
+	qnCfg := conf.Cfg.QiniuOss
 
 	// 文件上传的上传策略
 	putPolicy := storage.PutPolicy{
-		Scope: bucket,
+		Scope: qnCfg.BucketName,
 	}
-	mac := qbox.NewMac(accessKey, secretKey)
-	upToken = putPolicy.UploadToken(mac)
-	return upToken
+	mac := qbox.NewMac(qnCfg.AccessKey, qnCfg.SecretKey)
+	upToken := putPolicy.UploadToken(mac)
+	return &qiniuOss{upToken: upToken}
 }
 
-func QiniuGoUpload(upToken, couldFile, localFile string) {
+// QiniuGoUpload 上传
+func (qn *qiniuOss) QiniuGoUpload(couldFile, localFile string) {
 	// 文件上传，资源管理等配置
 	cfg := storage.Config{}
 
@@ -37,7 +43,7 @@ func QiniuGoUpload(upToken, couldFile, localFile string) {
 	}
 
 	// 开始上传
-	err := formUploader.PutFile(context.Background(), &ret, upToken, couldFile, localFile, &putExtra)
+	err := formUploader.PutFile(context.Background(), &ret, qn.upToken, couldFile, localFile, &putExtra)
 	if err != nil {
 		fmt.Println(err)
 		return

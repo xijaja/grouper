@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime"
 	"strings"
+	"time"
 )
 
 // ---------------------------------------------
@@ -14,46 +15,36 @@ import (
 // ---------------------------------------------
 
 // GetFileList 获取文件列表
-func GetFileList(path string, up func(newPath string)) {
+func GetFileList(path string) (newPathList []string) {
+	// 增加后缀
+	if path[len(path)-1:] != "/" {
+		path += "/"
+	}
+	// 开始遍历
+	iterateOverFiles(path, func(newPath string) {
+		newPathList = append(newPathList, newPath)
+	})
+	// 等待遍历结束
+	time.Sleep(2 * time.Second)
+	return newPathList
+}
+
+// iterateOverFiles 遍历指定路径的文件
+func iterateOverFiles(path string, up func(newPath string)) {
 	// 获取路径
 	fs, _ := ioutil.ReadDir(path)
-
-	// 判断上传文件的类型，然后执行上传
-	if path[len(path)-4:] == ".zip" {
-		// 是压缩包
-		up(path)
-	} else {
-		// 增加后缀
-		if path[len(path)-1:] != "/" {
-			path += "/"
-		}
-		// 是文件夹
-		for _, file := range fs {
-			if file.IsDir() {
-				// 遇到文件夹时就开启一个并发递归
-				go GetFileList(path+file.Name()+"/", up)
-			} else {
-				newPath := path + file.Name()
-				up(newPath) // 调用函数参数
-			}
+	// 执行遍历
+	for _, file := range fs {
+		if file.IsDir() {
+			// 遇到文件夹时就开启一个并发递归
+			go iterateOverFiles(path+file.Name()+"/", up)
+		} else {
+			newPath := path + file.Name()
+			fmt.Println("path - 1: ", path[:len(path)-1])
+			up(newPath) // 调用函数参数
 		}
 	}
 }
-
-// GetFilesAndDirs 获取指定目录下的所有文件和目录
-// func GetFilesAndDirs(dirPth string) (files []string, dirs []string, err error) {
-// 	err = filepath.Walk(dirPth, func(path string, info os.FileInfo, err error) error {
-// 		files = append(files, path)
-// 		return nil
-// 	})
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	for _, file := range files {
-// 		dirs = append(dirs, file[len(dirPth):])
-// 	}
-// 	return files, dirs, err
-// }
 
 // ---------------------------------------------
 // 退出程序

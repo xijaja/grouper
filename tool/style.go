@@ -8,7 +8,7 @@ import (
 )
 
 // NameStyle 检查命名规范
-func NameStyle(name string, dirPth string) {
+func NameStyle(name string, path string) {
 	if name == "" {
 		log.Fatalln("🐻 大熊弟，项目名称不能为空哟～")
 	}
@@ -48,7 +48,7 @@ func NameStyle(name string, dirPth string) {
 	}
 
 	// 判断文件或文件夹是否存在
-	_, err := os.Stat(dirPth)
+	_, err := os.Stat(path)
 	if err != nil {
 		log.Fatalln("😭 文件或文件夹不存在！")
 	}

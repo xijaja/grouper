@@ -9,7 +9,12 @@ import (
 	"upauto/conf"
 )
 
-func CosClient() (client *cos.Client) {
+type tencentCos struct {
+	client *cos.Client
+}
+
+// CosClient 获取cos句柄
+func CosClient() (tx *tencentCos) {
 	// 获取配置
 	txCos := conf.Cfg.TencentCos
 	// 将 examplebucket-1250000000 和 COS_REGION 修改为用户真实的信息
@@ -20,22 +25,23 @@ func CosClient() (client *cos.Client) {
 	su, _ := url.Parse("https://service.cos.myqcloud.com")
 	b := &cos.BaseURL{BucketURL: u, ServiceURL: su}
 	// 1.永久密钥
-	client = cos.NewClient(b, &http.Client{
+	client := cos.NewClient(b, &http.Client{
 		Transport: &cos.AuthorizationTransport{
 			SecretID:  txCos.SecretID,  // 替换为用户的 SecretId，请登录访问管理控制台进行查看和管理，https://console.cloud.tencent.com/cam/capi
 			SecretKey: txCos.SecretKey, // 替换为用户的 SecretKey，请登录访问管理控制台进行查看和管理，https://console.cloud.tencent.com/cam/capi
 		},
 	})
-	return client
+	return &tencentCos{client: client}
 }
 
-func CosUpload(client *cos.Client, key, file string) (ok bool) {
+// Upload 上传
+func (tx *tencentCos) Upload(key, file string) (ok bool) {
 	// 上传配置
 	opt := &cos.MultiUploadOptions{
 		ThreadPoolSize: 1024,
 	}
 	// 上传
-	_, _, err := client.Object.Upload(
+	_, _, err := tx.client.Object.Upload(
 		context.Background(), key, file, opt,
 	)
 	// 处理错误
