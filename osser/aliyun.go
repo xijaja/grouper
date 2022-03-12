@@ -6,8 +6,12 @@ import (
 	"upauto/conf"
 )
 
+type alioss struct {
+	bucket *oss.Bucket
+}
+
 // AliyunGetBucket 获取一个桶子
-func AliyunGetBucket() *oss.Bucket {
+func AliyunGetBucket() *alioss {
 	aly := conf.Cfg.AliyunOss
 	// 创建OSSClient实例。
 	client, err := oss.New(aly.Endpoint, aly.KeyID, aly.KeySecret)
@@ -19,13 +23,13 @@ func AliyunGetBucket() *oss.Bucket {
 	if err != nil {
 		fmt.Println("报错:", err)
 	}
-	return bucket
+	return &alioss{bucket: bucket}
 }
 
 // AliyunGoUpload 执行上传
-func AliyunGoUpload(bucket *oss.Bucket, obj, locPth string) (ok bool) {
+func (ali *alioss) AliyunGoUpload(obj, locPth string) (ok bool) {
 	// 上传文件，第一个参数是云文件，第二个参数是本地路径
-	err := bucket.PutObjectFromFile(obj, locPth)
+	err := ali.bucket.PutObjectFromFile(obj, locPth)
 	if err != nil {
 		fmt.Println("报错:", err)
 		return false
