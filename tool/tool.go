@@ -40,7 +40,7 @@ func iterateOverFiles(path string, up func(newPath string)) {
 			go iterateOverFiles(path+file.Name()+"/", up)
 		} else {
 			newPath := path + file.Name()
-			fmt.Println("path - 1: ", path[:len(path)-1])
+			fmt.Println("扫描: ", path[:len(path)-1])
 			up(newPath) // 调用函数参数
 		}
 	}
