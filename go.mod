@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.1+incompatible
+	github.com/panjf2000/ants/v2 v2.4.8
 	github.com/qiniu/go-sdk/v7 v7.11.1
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.34
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
