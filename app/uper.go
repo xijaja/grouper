@@ -94,7 +94,7 @@ func Uper() {
 	}
 }
 
-// 并发树
+// 并发数
 func totalPool(num int) (total int) {
 	switch {
 	case num <= 100:
