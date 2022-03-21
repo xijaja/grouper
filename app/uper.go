@@ -3,12 +3,12 @@ package app
 import (
 	"fmt"
 	"github.com/panjf2000/ants/v2"
+	"grouper/conf"
+	"grouper/osser"
+	"grouper/tool"
 	"log"
 	"sync"
 	"time"
-	"upauto/conf"
-	"upauto/osser"
-	"upauto/tool"
 )
 
 func Uper() {

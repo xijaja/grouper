@@ -3,7 +3,7 @@ package osser
 import (
 	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"upauto/conf"
+	"grouper/conf"
 )
 
 type alioss struct {

@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/tencentyun/cos-go-sdk-v5"
+	"grouper/conf"
 	"net/http"
 	"net/url"
-	"upauto/conf"
 )
 
 type tencentCos struct {
