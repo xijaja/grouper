@@ -3,8 +3,8 @@ package conf
 import (
 	"flag"
 	"fmt"
+	"grouper/tool"
 	"os"
-	"upauto/tool"
 )
 
 // ---------------------------------------------

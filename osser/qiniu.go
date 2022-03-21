@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
-	"upauto/conf"
+	"grouper/conf"
 )
 
 type qiniuOss struct {
