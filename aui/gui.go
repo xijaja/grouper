@@ -3,25 +3,8 @@ package aui
 import (
 	"fmt"
 	g "github.com/AllenDang/giu"
-	"grouper/tool"
 	"os"
 )
-
-// 获取配置信息
-var data *tool.Data   // json配置信息
-var isFixProject bool // 是否修改项目
-var isFixSetUp bool
-var upType []string
-var upTypeSelected int32
-
-// 初始化信息
-func init() {
-	data = tool.ReadData() // json配置信息
-	upType = make([]string, 3)
-	upType[0] = "阿里云OSS"
-	upType[1] = "腾讯云COS"
-	upType[2] = "七牛云OSS"
-}
 
 // Loop UI界面视图
 func Loop() {
@@ -29,7 +12,7 @@ func Loop() {
 	g.MainMenuBar().Layout(
 		g.Menu("项目").Layout(
 			g.MenuItem("添加").OnClick(func() {
-				// showPD = !showPD
+				isAddProject = !isAddProject
 			}),
 			g.Separator(), // 分割线
 			g.MenuItem("退出").OnClick(func() {
@@ -39,10 +22,14 @@ func Loop() {
 		g.Menu("设置").Layout(
 			// g.Checkbox("复选框", &checked),
 			g.MenuItem("阿里云OSS").OnClick(func() {
-				isFixSetUp = !isFixSetUp
+				isSetUpAli = !isSetUpAli
 			}),
-			g.MenuItem("腾讯云COS"),
-			g.MenuItem("七牛云OSS"),
+			g.MenuItem("腾讯云COS").OnClick(func() {
+				isSetUpTen = !isSetUpTen
+			}),
+			g.MenuItem("七牛云OSS").OnClick(func() {
+				isSetUpQin = !isSetUpQin
+			}),
 		),
 		g.Menu("开发者").Layout(
 			g.Label("产品：Grouper"),
@@ -56,38 +43,60 @@ func Loop() {
 	).Build()
 
 	// 项目列表（默认）
-	g.Window("项目列表").Pos(10, 30).IsOpen(nil).Size(300, 560).Layout(
+	g.Window("项目列表").Pos(10, 30).Size(300, 560).Layout(
+		g.PrepareMsgbox(), // 弹窗就绪
 		g.TabBar().TabItems(
-			projectsTabItem(), // 项目列表
+			g.TabItem("项目列表").Layout(
+				ps..., // 项目列表
+			),
 		),
+
+		// g.Dummy(0, 80), // 间隙、空隙
+		// 一个进度条控件 todo 用窗口控件设置
+		// g.Align(g.AlignCenter).To(
+		// 	g.ProgressBar(0.8),
+		// ),
 	)
 
-	// 修改项目
-	fixProject(isFixProject, 2)
+	// 添加项目
+	if isAddProject {
+		g.Window("添加项目").IsOpen(&isAddProject).Flags(g.WindowFlagsNone).Pos(320, 30).Size(400, 200).Layout(
+			addOneProject(&oneProject)...,
+		)
+	}
 
-	// 修改
-	inputSth := data.UpService.AliyunOss
-	if isFixSetUp {
-		g.Window("阿里云OSS设置").IsOpen(&isFixSetUp).Flags(g.WindowFlagsNone).Pos(90, 110).Size(400, 500).Layout(
-			g.Label("endpoint（地域节点地址）"),
-			g.InputText(&inputSth.Endpoint).Size(g.Auto),
-			g.InputTextMultiline(&inputSth.Endpoint),
-			g.Label("key_id（oss的key）"),
-			g.InputText(&inputSth.KeyID).Size(g.Auto),
-			g.Label("key_secret（oss的secret）"),
-			g.InputText(&inputSth.KeySecret).Size(g.Auto),
-			g.Label("bucket_name（储存桶的名字）"),
-			g.InputText(&inputSth.BucketName).Size(g.Auto),
-			g.Label("visit_addr（绑定的域名或查看地址）"),
-			g.InputText(&inputSth.Domain).Size(g.Auto),
+	// 修改项目
+	if isFixProject {
+		g.Window("修改项目").IsOpen(&isFixProject).Flags(g.WindowFlagsNone).Pos(320, 30).Size(400, 200).Layout(
+			fixOldProject(&oldProject)...,
+		)
+	}
+
+	// 上传进度条 todo 同时只能有一个上传任务，即当 isProgressBar 为true时，所有的上传按钮都将被禁用
+	if isProgressBar {
+		g.Window("正在上传...").IsOpen(&isProgressBar).Flags(g.WindowFlagsNoTitleBar|g.WindowFlagsNoResize|g.WindowFlagsNoCollapse).
+			Pos(320, 540).Size(400, 50).Layout(
 			g.Align(g.AlignCenter).To(
-				g.Row(
-					g.Button("保存").Size(60, 25).OnClick(func() {
-						fmt.Println("点击保存setUp")
-						fmt.Println(inputSth)
-					}),
-				),
+				g.Label(fmt.Sprintf("【%v】上传中...", projectName)),
+				g.ProgressBar(progressValue).Size(g.Auto, 2),
 			),
+		)
+	}
+
+	// 修改设置
+	if isSetUpAli {
+		g.Window("阿里云OSS设置").IsOpen(&isSetUpAli).Flags(g.WindowFlagsNone).Pos(120, 50).Size(400, 500).Layout(
+			setUps(&ali)...,
+		)
+	}
+	if isSetUpTen {
+		g.Window("腾讯云cos设置").IsOpen(&isSetUpTen).Flags(g.WindowFlagsNone).Pos(130, 60).Size(400, 500).Layout(
+			setUps(&ten)...,
+		)
+	}
+	if isSetUpQin {
+		g.Window("七牛云oss设置").IsOpen(&isSetUpQin).Flags(g.WindowFlagsNone).Pos(140, 70).Size(400, 500).Layout(
+			setUps(&qin)...,
 		)
 	}
 }

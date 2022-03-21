@@ -1,4 +1,9 @@
-# grouper
+# grouper 🐟
+
+![icon](http://prd.occo.pro/grouper/icon25.png)
+
+![golang](https://img.shields.io/badge/Made%20with-Golang-00ADD8.svg)
+![Maintained](https://img.shields.io/badge/Maintained%3F-yes-red.svg)
 
 一个将本地某个指定的文件夹上传到云oss存储的服务，
 特别是我在使用Axure制作PRD文档之后，需要将其与团队共享。
