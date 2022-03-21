@@ -23,23 +23,41 @@ func projectList(p *tool.Project) *g.TreeNodeWidget {
 		g.Label(fmt.Sprintf("上传服务：%v", p.UpType)),
 		g.Label(fmt.Sprintf("浏览地址：%v", p.VisitAddr)).Wrapped(true),
 		g.Row(
-			g.Button("拷链").Size(60, 25),
+			g.Button("拷链").Size(60, 25), // todo 拷贝链接
 			g.Button("修改").Size(60, 25).OnClick(func() {
-				oldProject = *p
-				fmt.Println(p)
+				oldProject = *p // 参数传递
 				if !isFixProject {
 					isFixProject = !isFixProject
-				}
+				} // 如果弹窗未弹出，则使其弹出
 			}),
-			g.Button("上传").Size(60, 25),
+			g.Button("上传").Size(60, 25).OnClick(func() {
+				// 如果当前有正在上传的任务
+				if isProgressBar {
+					g.Msgbox("心急吃不了热豆腐", "已经有一个任务正在执行了...").Buttons(g.MsgboxButtonsOk)
+					return
+				}
+				// 一个新的上传任务
+				g.Msgbox("上传项目", "准备好开始上传了吗？").Buttons(g.MsgboxButtonsOkCancel).
+					ResultCallback(func(result g.DialogResult) {
+						if result {
+							// 通过回调获悉，开始上传
+							fmt.Println("开始上传……")
+							projectName = p.Name
+							isProgressBar = true
+						} else {
+							fmt.Println("取消上传……")
+						}
+					})
+				return
+			}),
 		),
 	)
 }
 
-// 修改项目
+// 修改项目 todo 保存写入并弹窗
 func fixOldProject(old *tool.Project) []g.Widget {
 	return []g.Widget{
-		g.Label("输入你项目的名字（注意，这不应该是中文）"), // todo 项目名应唯一且非中文
+		g.Label("输入你项目的名字（注意，唯一且非中文）"), // todo 项目名应唯一且非中文
 		g.InputText(&old.Name).Size(g.Auto),
 		g.Label("选择上传服务（一定要设置对应的资料哦）"),
 		g.Combo("", upType[upTypeSelected], upType, &upTypeSelected).Size(g.Auto).OnChange(func() {
@@ -58,7 +76,7 @@ func fixOldProject(old *tool.Project) []g.Widget {
 	}
 }
 
-// 添加一个项目
+// 添加一个项目 todo 保存写入并弹窗
 func addOneProject(one *tool.Project) []g.Widget {
 	return []g.Widget{
 		g.Label("输入你项目的名字（注意，这不应该是中文）"), // todo 项目名应唯一且非中文
@@ -80,7 +98,7 @@ func addOneProject(one *tool.Project) []g.Widget {
 	}
 }
 
-// 修改设置
+// 修改设置 todo 保存写入并弹窗
 func setUps(any any) []g.Widget {
 	switch any.(type) {
 	case *tool.AliyunOss: // 修改阿里云oss设置

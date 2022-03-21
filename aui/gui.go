@@ -1,28 +1,10 @@
 package aui
 
 import (
+	"fmt"
 	g "github.com/AllenDang/giu"
-	"grouper/tool"
 	"os"
 )
-
-// 获取配置信息
-// var data *tool.Data   // json配置信息
-// var isFixProject bool // 是否修改项目
-// var isFixSetUp bool
-var upType []string
-var upTypeSelected int32
-
-// var ali tool.AliyunOss
-
-// 初始化信息
-func init() {
-	data = tool.ReadData() // json配置信息
-	upType = make([]string, 3)
-	upType[0] = "阿里云OSS"
-	upType[1] = "腾讯云COS"
-	upType[2] = "七牛云OSS"
-}
 
 // Loop UI界面视图
 func Loop() {
@@ -62,11 +44,18 @@ func Loop() {
 
 	// 项目列表（默认）
 	g.Window("项目列表").Pos(10, 30).Size(300, 560).Layout(
+		g.PrepareMsgbox(), // 弹窗就绪
 		g.TabBar().TabItems(
 			g.TabItem("项目列表").Layout(
 				ps..., // 项目列表
 			),
 		),
+
+		// g.Dummy(0, 80), // 间隙、空隙
+		// 一个进度条控件 todo 用窗口控件设置
+		// g.Align(g.AlignCenter).To(
+		// 	g.ProgressBar(0.8),
+		// ),
 	)
 
 	// 添加项目
@@ -80,6 +69,17 @@ func Loop() {
 	if isFixProject {
 		g.Window("修改项目").IsOpen(&isFixProject).Flags(g.WindowFlagsNone).Pos(320, 30).Size(400, 200).Layout(
 			fixOldProject(&oldProject)...,
+		)
+	}
+
+	// 上传进度条 todo 同时只能有一个上传任务，即当 isProgressBar 为true时，所有的上传按钮都将被禁用
+	if isProgressBar {
+		g.Window("正在上传...").IsOpen(&isProgressBar).Flags(g.WindowFlagsNoTitleBar|g.WindowFlagsNoResize|g.WindowFlagsNoCollapse).
+			Pos(320, 540).Size(400, 50).Layout(
+			g.Align(g.AlignCenter).To(
+				g.Label(fmt.Sprintf("【%v】上传中...", projectName)),
+				g.ProgressBar(progressValue).Size(g.Auto, 2),
+			),
 		)
 	}
 

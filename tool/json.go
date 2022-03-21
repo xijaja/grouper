@@ -9,7 +9,7 @@ import (
 // Project 项目
 type Project struct {
 	Name      string `json:"name"`       // 项目名称
-	UpType    string `json:"up_type"`    // 上传服务类型：必须为 tencent alioss qiniu 中的一个
+	UpType    string `json:"up_type"`    // 上传服务类型，必须为：阿里云OSS、腾讯云COS、七牛云OSS，中的一个
 	LocalFile string `json:"local_file"` // 本地地址
 	VisitAddr string `json:"visit_addr"` // 查看地址
 }
