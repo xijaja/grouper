@@ -1,10 +1,17 @@
-# grouper 🐟
 
-![icon](http://prd.occo.pro/grouper/icon25.png)
+<div align="center">
+<a href=""><img alt="Stellar" src="http://prd.occo.pro/grouper/icon25.png" width="" /></a>
+<br/>
+<strong> 原型仔之友 </strong>
+<h1>Grouper</h1>
+</div>
+<p align="center">
+<a href=""><img alt="Build Status" src="https://circleci.com/gh/stellar/go.svg?style=shield" /></a>
+<a href=""><img alt="Golang" src="https://img.shields.io/badge/Made%20with-Go-00ADD8.svg" /></a>
+<a href=""><img alt="Maintained" src="https://img.shields.io/badge/Maintained%3F-yes-red.svg" /></a>
+</p>
 
-![golang](https://img.shields.io/badge/Made%20with-Golang-00ADD8.svg)
-![Maintained](https://img.shields.io/badge/Maintained%3F-yes-red.svg)
-
+## 介绍
 一个将本地某个指定的文件夹上传到云oss存储的服务，
 特别是我在使用Axure制作PRD文档之后，需要将其与团队共享。
 
@@ -17,6 +24,7 @@
 如果你和我一样，需要将Axure生成的文件夹上传托管，grouper或许是个不错的选择。
 （ps: 名字怪怪的，或许有其他名字？）
 
+## Build
 编译命令
 - go build -o grouper main.go
 
