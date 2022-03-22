@@ -13,10 +13,7 @@ type qiniuOss struct {
 }
 
 // QiniuGetUpToken 获取上传token
-func QiniuGetUpToken() *qiniuOss {
-	// 获取配置信息
-	qnCfg := conf.Cfg.QiniuOss
-
+func QiniuGetUpToken(qnCfg conf.QiniuOss) *qiniuOss {
 	// 文件上传的上传策略
 	putPolicy := storage.PutPolicy{
 		Scope: qnCfg.BucketName,

@@ -14,9 +14,7 @@ type tencentCos struct {
 }
 
 // CosClient 获取cos句柄
-func CosClient() (tx *tencentCos) {
-	// 获取配置
-	txCos := conf.Cfg.TencentCos
+func CosClient(txCos conf.TencentCos) (tx *tencentCos) {
 	// 将 examplebucket-1250000000 和 COS_REGION 修改为用户真实的信息
 	// 存储桶名称，由bucketname-appid 组成，appid必须填入，可以在COS控制台查看存储桶名称。https://console.cloud.tencent.com/cos5/bucket
 	// COS_REGION 可以在控制台查看，https://console.cloud.tencent.com/cos5/bucket, 关于地域的详情见 https://cloud.tencent.com/document/product/436/6224

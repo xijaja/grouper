@@ -9,9 +9,9 @@ import (
 func main() {
 	// 启动
 	// app.Uper()
-	// g.MasterWindowFlagsNotResizable  // MasterWindowFlagsMaximized
+
+	// GUI  // g.MasterWindowFlagsNotResizable  // MasterWindowFlagsMaximized
 	wnd := g.NewMasterWindow("Grouper 🐟", 730, 600, g.MasterWindowFlagsNotResizable)
 	// wnd.SetDropCallback(onDrop)
-	go aui.Prg()
 	wnd.Run(aui.Loop)
 }

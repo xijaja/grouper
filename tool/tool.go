@@ -72,17 +72,16 @@ func isOsWindows() bool {
 	// runtime.GOARCH 返回当前的系统架构；runtime.GOOS 返回当前的操作系统。
 	sysType := runtime.GOOS
 	// fmt.Println(fmt.Sprintf("您的系统是%v，采用%v架构", runtime.GOOS, runtime.GOARCH))
-	if sysType == "linux" {
-		// LINUX系统
-		// fmt.Println("Linux system")
-		return false
+	switch sysType {
+	case "linux":
+		return false // LINUX系统
+	case "windows":
+		return true // windows系统
+	case "darwin":
+		return false // LINUX系统
+	default:
+		return false // 其他系统
 	}
-	if sysType == "windows" {
-		// windows系统
-		// fmt.Println("Windows system")
-		return true
-	}
-	return false
 }
 
 // 读取用户输入
