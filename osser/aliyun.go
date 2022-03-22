@@ -11,8 +11,7 @@ type alioss struct {
 }
 
 // AliyunGetBucket 获取一个桶子
-func AliyunGetBucket() *alioss {
-	aly := conf.Cfg.AliyunOss
+func AliyunGetBucket(aly conf.AliyunOss) *alioss {
 	// 创建OSSClient实例。
 	client, err := oss.New(aly.Endpoint, aly.KeyID, aly.KeySecret)
 	if err != nil {

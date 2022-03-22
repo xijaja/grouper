@@ -50,12 +50,7 @@ func Loop() {
 				ps..., // 项目列表
 			),
 		),
-
 		// g.Dummy(0, 80), // 间隙、空隙
-		// 一个进度条控件 todo 用窗口控件设置
-		// g.Align(g.AlignCenter).To(
-		// 	g.ProgressBar(0.8),
-		// ),
 	)
 
 	// 添加项目
@@ -63,6 +58,7 @@ func Loop() {
 		g.Window("添加项目").IsOpen(&isAddProject).Flags(g.WindowFlagsNone).Pos(320, 30).Size(400, 200).Layout(
 			addOneProject(&oneProject)...,
 		)
+		isCyclic = true // 重新读取配置信息
 	}
 
 	// 修改项目
@@ -70,14 +66,15 @@ func Loop() {
 		g.Window("修改项目").IsOpen(&isFixProject).Flags(g.WindowFlagsNone).Pos(320, 30).Size(400, 200).Layout(
 			fixOldProject(&oldProject)...,
 		)
+		isCyclic = true // 重新读取配置信息
 	}
 
-	// 上传进度条 todo 同时只能有一个上传任务，即当 isProgressBar 为true时，所有的上传按钮都将被禁用
+	// 上传进度条
 	if isProgressBar {
 		g.Window("正在上传...").IsOpen(&isProgressBar).Flags(g.WindowFlagsNoTitleBar|g.WindowFlagsNoResize|g.WindowFlagsNoCollapse).
 			Pos(320, 540).Size(400, 50).Layout(
 			g.Align(g.AlignCenter).To(
-				g.Label(fmt.Sprintf("【%v】上传中...", projectName)),
+				g.Label(fmt.Sprintf("项目【%v】加速落地中...", upLoadProjectName)),
 				g.ProgressBar(progressValue).Size(g.Auto, 2),
 			),
 		)
@@ -98,5 +95,11 @@ func Loop() {
 		g.Window("七牛云oss设置").IsOpen(&isSetUpQin).Flags(g.WindowFlagsNone).Pos(140, 70).Size(400, 500).Layout(
 			setUps(&qin)...,
 		)
+	}
+
+	// 重新读取配置信息
+	if isCyclic {
+		cyclicUpdate()   // 重新读取
+		isCyclic = false // 读取完成
 	}
 }
