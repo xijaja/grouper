@@ -67,10 +67,12 @@ type Data struct {
 // 读取配置
 // ---------------------------------------------
 
+var jsonFile = "grouper.json" // 配置文件路径
+
 // ReadData 读取配置
 func ReadData() *Data {
 	// 读取json文件 todo 根据系统不同，如果没有则自动创建至特定目录
-	jsonData, err := ioutil.ReadFile("app/grouper.json")
+	jsonData, err := ioutil.ReadFile(jsonFile)
 	if err != nil {
 		fmt.Println("打开配置文件报错：", err)
 	}
@@ -86,7 +88,6 @@ func ReadData() *Data {
 
 // UpdateAliyunOss 更新阿里云OSS配置
 func (ali *AliyunOss) UpdateAliyunOss() {
-	jsonFile := "app/grouper.json"
 	DataInfo.UpService.AliyunOss = *ali
 	data, err := json.MarshalIndent(DataInfo, "", "	")
 	if err != nil {
@@ -100,7 +101,6 @@ func (ali *AliyunOss) UpdateAliyunOss() {
 
 // UpdateTencentCos 更新腾讯云COS配置
 func (ten *TencentCos) UpdateTencentCos() {
-	jsonFile := "app/grouper.json"
 	DataInfo.UpService.TencentCos = *ten
 	data, err := json.MarshalIndent(DataInfo, "", "	")
 	if err != nil {
@@ -114,7 +114,6 @@ func (ten *TencentCos) UpdateTencentCos() {
 
 // UpdateQiniuOss 更新七牛云OSS配置
 func (qin *QiniuOss) UpdateQiniuOss() {
-	jsonFile := "app/grouper.json"
 	DataInfo.UpService.QiniuOss = *qin
 	data, err := json.MarshalIndent(DataInfo, "", "	")
 	if err != nil {
@@ -128,7 +127,6 @@ func (qin *QiniuOss) UpdateQiniuOss() {
 
 // AddOneProject 添加一个项目
 func (p *Project) AddOneProject() {
-	jsonFile := "app/grouper.json"
 	if p.UpType == "" {
 		p.UpType = "阿里云OSS" // 默认选择
 	}
@@ -145,7 +143,6 @@ func (p *Project) AddOneProject() {
 
 // UpdateOneProject 更新一个项目
 func (p *Project) UpdateOneProject() {
-	jsonFile := "app/grouper.json"
 	for i := 0; i < len(DataInfo.Projects); i++ {
 		fmt.Println(i, DataInfo.Projects[i])
 		if DataInfo.Projects[i].Name == p.Name {

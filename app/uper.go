@@ -14,13 +14,20 @@ import (
 // CliUper 是CLI版
 // ---------------------------------------------
 func CliUper(project conf.Project, upServer any) {
+	// 声明进度条
+	var bar tool.Bar
 	// 执行上传
+	var ts int
 	num, addr := Grouper(project, upServer, func(n1, n2 int) {
-		var bar tool.Bar            // 声明进度条
-		bar.NewOption(0, int64(n2)) // 创建进度条
-		bar.Play(int64(n1))         // 进度值
-		bar.Finish()                // 结束进度条
+		if ts == 0 {
+			bar.NewOption(0, int64(n2)) // 创建进度条
+			bar.Play(int64(n1))         // 进度值
+		} else {
+			bar.Play(int64(n1)) // 进度值
+		}
+		ts++ // 更新被调用次数
 	})
+	bar.Finish() // 结束进度条
 	// 执行结束
 	fmt.Printf("🪖 报告长官， %v 个文件上传成功，访问地址为：%v/\n", num, addr)
 	fmt.Println("ps: 如果您上传的并非网页文件或图片，可能无法访问哟～")
@@ -35,11 +42,11 @@ func CliUper(project conf.Project, upServer any) {
 // ---------------------------------------------
 func Grouper(project conf.Project, upServer any, f func(n1, n2 int)) (num int, addr string) {
 	dirPth, name := project.LocalFile, project.Name
-	newPathList := tool.GetFileList(dirPth) // 遍历本地指定的文件夹  文件路径列表
+	newPathList := tool.GetFileList(dirPth) // 遍历本地指定的文件夹，文件路径列表
 	fmt.Println("扫描完成，开始上传：")
 
 	var wg sync.WaitGroup // 初始化并发池
-	var total int         // 文件总数
+	var total int         // 已上传的文件总数
 	var domain string     // 查看地址的域名
 	switch project.UpType {
 	case "阿里云OSS":
@@ -144,8 +151,4 @@ func view(name, domain string) (addr string) {
 	} else {
 		return domain + name
 	}
-}
-
-func ProgressBar(n1, n2 int) (value float32) {
-	return float32(n1 / n2)
 }
