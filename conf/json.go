@@ -67,7 +67,7 @@ type Data struct {
 // 读取配置
 // ---------------------------------------------
 
-var jsonFile = "grouper.json" // 配置文件路径
+var jsonFile = "../conf/grouper.json" // 配置文件路径
 
 // ReadData 读取配置
 func ReadData() *Data {

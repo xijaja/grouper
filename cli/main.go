@@ -51,9 +51,6 @@ func main() {
 		LocalFile: path,
 	}
 	ups := conf.DataInfo.UpService.AliyunOss
-
-	// fmt.Println(pj)
-	// fmt.Println(ups)
-
+	// 开始上传
 	app.CliUper(pj, ups)
 }

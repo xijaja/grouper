@@ -102,4 +102,5 @@ func Loop() {
 		cyclicUpdate()   // 重新读取
 		isCyclic = false // 读取完成
 	}
+	g.Update()
 }
