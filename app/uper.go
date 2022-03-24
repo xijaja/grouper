@@ -58,7 +58,7 @@ func Grouper(project conf.Project, upServer any, f func(n1, n2 int)) (num int, a
 		bkt := osser.AliyunGetBucket(ali) // 获取阿里云oss桶
 		p, _ := ants.NewPoolWithFunc(totalPool(len(newPathList)), func(i interface{}) {
 			newPath := i.(string)
-			couldFile, localFile := name+"/"+newPath[len(dirPth):], newPath
+			couldFile, localFile := name+newPath[len(dirPth):], newPath
 			bkt.AliyunGoUpload(couldFile, localFile) // 开始上传
 			wg.Done()
 		}) // 并发任务
@@ -77,7 +77,7 @@ func Grouper(project conf.Project, upServer any, f func(n1, n2 int)) (num int, a
 		cos := osser.CosClient(tx) // 腾讯云cos句柄
 		p, _ := ants.NewPoolWithFunc(totalPool(len(newPathList)), func(i interface{}) {
 			newPath := i.(string)
-			couldFile, localFile := name+"/"+newPath[len(dirPth):], newPath
+			couldFile, localFile := name+newPath[len(dirPth):], newPath
 			cos.Upload(couldFile, localFile) // 开始上传
 			wg.Done()
 		}) // 并发任务
@@ -96,7 +96,7 @@ func Grouper(project conf.Project, upServer any, f func(n1, n2 int)) (num int, a
 		upt := osser.QiniuGetUpToken(qin) // 获取七牛云上传Token
 		p, _ := ants.NewPoolWithFunc(totalPool(len(newPathList)), func(i interface{}) {
 			newPath := i.(string)
-			couldFile, localFile := name+"/"+newPath[len(dirPth):], newPath
+			couldFile, localFile := name+newPath[len(dirPth):], newPath
 			upt.QiniuGoUpload(couldFile, localFile) // 开始上传
 			wg.Done()
 		}) // 并发任务

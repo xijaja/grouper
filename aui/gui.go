@@ -61,9 +61,9 @@ func Loop() {
 		isCyclic = true // 重新读取配置信息
 	}
 
-	// 修改项目
+	// 编辑项目
 	if isFixProject {
-		g.Window("修改项目").IsOpen(&isFixProject).Flags(g.WindowFlagsNone).Pos(320, 30).Size(400, 200).Layout(
+		g.Window("编辑项目").IsOpen(&isFixProject).Flags(g.WindowFlagsNone).Pos(320, 30).Size(400, 200).Layout(
 			fixOldProject(&oldProject)...,
 		)
 		isCyclic = true // 重新读取配置信息
@@ -102,5 +102,4 @@ func Loop() {
 		cyclicUpdate()   // 重新读取
 		isCyclic = false // 读取完成
 	}
-	g.Update()
 }

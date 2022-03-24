@@ -89,40 +89,19 @@ func ReadData() *Data {
 // UpdateAliyunOss 更新阿里云OSS配置
 func (ali *AliyunOss) UpdateAliyunOss() {
 	DataInfo.UpService.AliyunOss = *ali
-	data, err := json.MarshalIndent(DataInfo, "", "	")
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
-	err = ioutil.WriteFile(jsonFile, data, 0777)
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
+	resetJsonFile()
 }
 
 // UpdateTencentCos 更新腾讯云COS配置
 func (ten *TencentCos) UpdateTencentCos() {
 	DataInfo.UpService.TencentCos = *ten
-	data, err := json.MarshalIndent(DataInfo, "", "	")
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
-	err = ioutil.WriteFile(jsonFile, data, 0777)
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
+	resetJsonFile()
 }
 
 // UpdateQiniuOss 更新七牛云OSS配置
 func (qin *QiniuOss) UpdateQiniuOss() {
 	DataInfo.UpService.QiniuOss = *qin
-	data, err := json.MarshalIndent(DataInfo, "", "	")
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
-	err = ioutil.WriteFile(jsonFile, data, 0777)
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
+	resetJsonFile()
 }
 
 // AddOneProject 添加一个项目
@@ -131,25 +110,34 @@ func (p *Project) AddOneProject() {
 		p.UpType = "阿里云OSS" // 默认选择
 	}
 	DataInfo.Projects = append(DataInfo.Projects, *p)
-	data, err := json.MarshalIndent(DataInfo, "", "	")
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
-	err = ioutil.WriteFile(jsonFile, data, 0777)
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
+	resetJsonFile()
 }
 
 // UpdateOneProject 更新一个项目
 func (p *Project) UpdateOneProject() {
 	for i := 0; i < len(DataInfo.Projects); i++ {
-		fmt.Println(i, DataInfo.Projects[i])
 		if DataInfo.Projects[i].Name == p.Name {
 			DataInfo.Projects[i] = *p
-			fmt.Println("找到了：", p.Name)
 		}
 	}
+	resetJsonFile()
+}
+
+func (p *Project) DeleteOneProject() {
+	var num int
+	for i := 0; i < len(DataInfo.Projects); i++ {
+		if DataInfo.Projects[i].Name == p.Name {
+			num = i
+			fmt.Println(p.Name)
+		}
+	}
+	DataInfo.Projects = append(DataInfo.Projects[:num], DataInfo.Projects[num+1:]...)
+	fmt.Println(DataInfo.Projects)
+	resetJsonFile()
+}
+
+// 重置配置文件
+func resetJsonFile() {
 	data, err := json.MarshalIndent(DataInfo, "", "	")
 	if err != nil {
 		fmt.Println("错误：", err)

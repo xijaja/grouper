@@ -18,15 +18,15 @@ func initProjectItems() (projectsWidget []g.Widget) {
 	return projectsWidget
 }
 
-// 项目列表 todo 拷贝链接
+// 项目列表
 func projectList(p *conf.Project) *g.TreeNodeWidget {
 	return g.TreeNode(p.Name).Flags(g.TreeNodeFlagsCollapsingHeader).Layout(
 		g.Label(fmt.Sprintf("项目名称：%v", p.Name)),
 		g.Label(fmt.Sprintf("上传服务：%v", p.UpType)),
 		g.Label(fmt.Sprintf("浏览地址：%v", addr(p.Name, p.UpType))).Wrapped(true),
 		g.Row(
-			g.Button("拷链").Size(60, 25),
-			g.Button("修改").Size(60, 25).OnClick(func() {
+			// g.Button("拷链").Size(60, 25),
+			g.Button("编辑").Size(60, 25).OnClick(func() {
 				oldProject = *p // 修改项目参数传递
 				if !isFixProject {
 					isFixProject = !isFixProject
@@ -68,8 +68,8 @@ func projectList(p *conf.Project) *g.TreeNodeWidget {
 // 修改项目
 func fixOldProject(old *conf.Project) []g.Widget {
 	return []g.Widget{
-		g.Label("当前项目的名字（唯一且不可修改）"),
-		g.InputText(&old.Name).Size(g.Auto).Flags(g.InputTextFlagsReadOnly),
+		g.Label(fmt.Sprintf("项目名称：%v", old.Name)), // g.InputText(&old.Name).Size(g.Auto).Flags(g.InputTextFlagsReadOnly),
+		g.Dummy(0, 1), // 间隙、空隙
 		g.Label("选择上传服务（一定要设置对应的资料哦）"),
 		g.Combo("", upType[upTypeSelected], upType, &upTypeSelected).Size(g.Auto).OnChange(func() {
 			old.UpType = upType[upTypeSelected]
@@ -77,18 +77,28 @@ func fixOldProject(old *conf.Project) []g.Widget {
 		}),
 		g.Label("文件夹路径（文件夹）"),
 		g.InputText(&old.LocalFile).Size(g.Auto),
-		g.Align(g.AlignCenter).To(
-			g.Row(
-				g.Button("确定").Size(60, 25).OnClick(func() {
-					fmt.Println("修改项目: ", old)
-					old.UpdateOneProject()
-					g.Msgbox("修改完成", "项目重组生态格局").Buttons(g.MsgboxButtonsOk).ResultCallback(func(result g.DialogResult) {
-						if result {
-							isFixProject = false // 关闭修改项目的窗口
-						}
-					})
-				}),
-			),
+		g.Dummy(0, 3), // 间隙、空隙
+		g.Row(
+			g.Button("删除").Size(60, 25).OnClick(func() {
+				g.Msgbox("删除项目", "快速沉淀，适度倾斜资源").Buttons(g.MsgboxButtonsOkCancel).ResultCallback(func(result g.DialogResult) {
+					if result {
+						old.DeleteOneProject() // 删除
+						isCyclic = true        // 重新读取配置信息
+						isFixProject = false   // 关闭项目窗口
+					}
+				})
+			}),
+			g.Button("取消").Size(60, 25).OnClick(func() {
+				isFixProject = false // 关闭项目窗口
+			}),
+			g.Button("确定").Size(60, 25).OnClick(func() {
+				old.UpdateOneProject() // 修改一个项目
+				g.Msgbox("修改完成", "项目重组生态格局").Buttons(g.MsgboxButtonsOk).ResultCallback(func(result g.DialogResult) {
+					if result {
+						isFixProject = false // 关闭修改项目的窗口
+					}
+				})
+			}),
 		),
 	}
 }
@@ -96,7 +106,7 @@ func fixOldProject(old *conf.Project) []g.Widget {
 // 添加一个项目 todo 增加对项目名称的判断限制
 func addOneProject(one *conf.Project) []g.Widget {
 	return []g.Widget{
-		g.Label("输入你项目的名字（唯一且非中文）"),
+		g.Label("输入你项目的名字（唯一且非中文，设保存后不可更改）"),
 		g.InputText(&one.Name).Size(g.Auto),
 		g.Label("选择上传服务（一定要设置对应的资料哦）"),
 		g.Combo("", upType[upTypeSelected], upType, &upTypeSelected).Size(g.Auto).OnChange(func() {

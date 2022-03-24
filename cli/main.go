@@ -40,8 +40,10 @@ func main() {
 	// 规范名称
 	name := *N
 	if name == "" {
+		// 没有名字则拆分链接最后一个单词
 		arr := strings.Split(path, "/")
-		name = arr[len(arr)-2 : len(arr)-1][0]
+		// 为名字加上斜杠用以命名上传后的文件夹
+		name = arr[len(arr)-2 : len(arr)-1][0] + "/"
 	}
 	tool.NameStyle(name, path) // 检查命名是否符合规范，文件夹是否存在
 	// 遍历文件并上传
