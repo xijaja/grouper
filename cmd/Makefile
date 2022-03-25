@@ -1,4 +1,6 @@
 all:
+	make default
+	make windows
 
 default:
 	go build -o main main.go
