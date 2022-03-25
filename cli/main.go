@@ -21,7 +21,7 @@ func main() {
 	// 解析命令行参数
 	flag.Parse()
 	if printVersion {
-		fmt.Println("版本号：v1.0-20210311")
+		fmt.Printf("版本号：%s\n", conf.Version)
 		fmt.Println("开发者：習武（公众号：逆天思维产品汪）")
 		fmt.Println("使用说明：xxx.xxx")
 		fmt.Println("Github地址：https://github.com/xiwuou/uper")

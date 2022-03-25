@@ -3,6 +3,7 @@ package aui
 import (
 	"fmt"
 	g "github.com/AllenDang/giu"
+	"grouper/conf"
 	"os"
 )
 
@@ -33,7 +34,7 @@ func Loop() {
 		),
 		g.Menu("开发者").Layout(
 			g.Label("产品：Grouper"),
-			g.Label("版本：v1.0.0-beta"),
+			g.Label(fmt.Sprintf("版本：%s\n", conf.Version)),
 			g.Label("Github：https://github.com/xiwuou/grouper"),
 			g.Separator(), // 分割线
 			g.Label("开发者：習武"),

@@ -13,8 +13,9 @@ import (
 // 初始化
 // ---------------------------------------------
 
-var jsonFile string // 配置文件路径
-var DataInfo *Data  // 配置信息
+var jsonFile string         // 配置文件路径
+var DataInfo *Data          // 配置信息
+const Version = "v1.0-beta" // 版本信息
 
 func init() {
 	// 获取用户主目录 u.HomeDir
