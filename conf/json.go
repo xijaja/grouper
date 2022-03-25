@@ -4,16 +4,27 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
+	"os/user"
 )
 
 // ---------------------------------------------
 // 初始化
 // ---------------------------------------------
 
-var DataInfo *Data
+var jsonFile string         // 配置文件路径
+var DataInfo *Data          // 配置信息
+const Version = "v1.0-beta" // 版本信息
 
 func init() {
-	DataInfo = ReadData()
+	// 获取用户主目录 u.HomeDir
+	u, err := user.Current()
+	if err != nil {
+		log.Fatal(err)
+	}
+	jsonFile = u.HomeDir + "/.grouper.json"
+	DataInfo = ReadData() // 初始化配置信息
 }
 
 // ---------------------------------------------
@@ -69,14 +80,60 @@ type Data struct {
 
 // ReadData 读取配置
 func ReadData() *Data {
-	// 读取json文件 todo 根据系统不同，如果没有则自动创建至特定目录
-	jsonData, err := ioutil.ReadFile("app/grouper.json")
+	// 判断是否存在配置文件
+	_, err := os.Stat(jsonFile)
+	// 如果不存在则写入后再读取
+	if os.IsNotExist(err) {
+		dataBytes := `{
+			"projects": [
+				{
+					"name": "test1",
+					"up_type": "阿里云OSS",
+					"local_file": "/您的主目录/您的子目录/同名文件夹test1"
+				},
+				{
+					"name": "test2",
+					"up_type": "阿里云OSS",
+					"local_file": "/您的主目录/您的子目录/同名文件夹test2"
+				}
+			],
+			"up_service": {
+				"tencent_cos": {
+					"bucket_name": "",
+					"cos_region": "",
+					"secret_id": "",
+					"secret_key": "",
+					"domain": ""
+				},
+				"aliyun_oss": {
+					"endpoint": "",
+					"key_id": "",
+					"key_secret": "",
+					"bucket_name": "",
+					"domain": ""
+				},
+				"qiniu_oss": {
+					"access_key": "",
+					"secret_key": "",
+					"bucket_name": "",
+					"domain": ""
+				}
+			}
+		}`
+		// fmt.Println("dataBytes:", dataBytes)
+		_ = ioutil.WriteFile(jsonFile, []byte(dataBytes), 0666)
+	}
+	// 否则直接读取json文件
+	jsonData, err := ioutil.ReadFile(jsonFile)
 	if err != nil {
-		fmt.Println("打开配置文件报错：", err)
+		log.Fatal("打开配置文件报错：", err)
 	}
 	// 绑定到结构体
 	var info Data
 	err = json.Unmarshal(jsonData, &info)
+	if err != nil {
+		log.Fatal("数据错误：", err)
+	}
 	return &info
 }
 
@@ -86,73 +143,57 @@ func ReadData() *Data {
 
 // UpdateAliyunOss 更新阿里云OSS配置
 func (ali *AliyunOss) UpdateAliyunOss() {
-	jsonFile := "app/grouper.json"
 	DataInfo.UpService.AliyunOss = *ali
-	data, err := json.MarshalIndent(DataInfo, "", "	")
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
-	err = ioutil.WriteFile(jsonFile, data, 0777)
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
+	resetJsonFile()
 }
 
 // UpdateTencentCos 更新腾讯云COS配置
 func (ten *TencentCos) UpdateTencentCos() {
-	jsonFile := "app/grouper.json"
 	DataInfo.UpService.TencentCos = *ten
-	data, err := json.MarshalIndent(DataInfo, "", "	")
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
-	err = ioutil.WriteFile(jsonFile, data, 0777)
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
+	resetJsonFile()
 }
 
 // UpdateQiniuOss 更新七牛云OSS配置
 func (qin *QiniuOss) UpdateQiniuOss() {
-	jsonFile := "app/grouper.json"
 	DataInfo.UpService.QiniuOss = *qin
-	data, err := json.MarshalIndent(DataInfo, "", "	")
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
-	err = ioutil.WriteFile(jsonFile, data, 0777)
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
+	resetJsonFile()
 }
 
 // AddOneProject 添加一个项目
 func (p *Project) AddOneProject() {
-	jsonFile := "app/grouper.json"
 	if p.UpType == "" {
 		p.UpType = "阿里云OSS" // 默认选择
 	}
 	DataInfo.Projects = append(DataInfo.Projects, *p)
-	data, err := json.MarshalIndent(DataInfo, "", "	")
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
-	err = ioutil.WriteFile(jsonFile, data, 0777)
-	if err != nil {
-		fmt.Println("错误：", err)
-	}
+	resetJsonFile()
 }
 
 // UpdateOneProject 更新一个项目
 func (p *Project) UpdateOneProject() {
-	jsonFile := "app/grouper.json"
 	for i := 0; i < len(DataInfo.Projects); i++ {
-		fmt.Println(i, DataInfo.Projects[i])
 		if DataInfo.Projects[i].Name == p.Name {
 			DataInfo.Projects[i] = *p
-			fmt.Println("找到了：", p.Name)
 		}
 	}
+	resetJsonFile()
+}
+
+// DeleteOneProject 删除一个项目
+func (p *Project) DeleteOneProject() {
+	var num int
+	for i := 0; i < len(DataInfo.Projects); i++ {
+		if DataInfo.Projects[i].Name == p.Name {
+			num = i
+			fmt.Println(p.Name)
+		}
+	}
+	DataInfo.Projects = append(DataInfo.Projects[:num], DataInfo.Projects[num+1:]...)
+	fmt.Println(DataInfo.Projects)
+	resetJsonFile()
+}
+
+// 重置配置文件
+func resetJsonFile() {
 	data, err := json.MarshalIndent(DataInfo, "", "	")
 	if err != nil {
 		fmt.Println("错误：", err)

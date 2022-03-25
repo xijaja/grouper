@@ -7,9 +7,6 @@ import (
 
 // 程序入口
 func main() {
-	// 启动
-	// app.Uper()
-
 	// GUI  // g.MasterWindowFlagsNotResizable  // MasterWindowFlagsMaximized
 	wnd := g.NewMasterWindow("Grouper 🐟", 730, 600, g.MasterWindowFlagsNotResizable)
 	// wnd.SetDropCallback(onDrop)

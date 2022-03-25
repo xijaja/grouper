@@ -53,7 +53,7 @@ func iterateOverFiles(path string, up func(newPath string)) {
 func GoodBye() {
 	fmt.Println("⚠ 按回车或回复任意，退出程序。")
 	reader := bufio.NewReader(os.Stdin) // 读取命令行
-	osWin := isOsWindows()              // 当前系统是否为windows
+	osWin := IsOsWindows()              // 当前系统是否为windows
 	_ = readInput(reader, osWin)
 	// 按 CTRL+C 或输入 exit 以退出程序
 	// t := strings.Split(text, " ")
@@ -67,8 +67,8 @@ func GoodBye() {
 	}
 }
 
-// 获取当前计算机系统类型，是否为Windows
-func isOsWindows() bool {
+// IsOsWindows 获取当前计算机系统类型，是否为Windows
+func IsOsWindows() bool {
 	// runtime.GOARCH 返回当前的系统架构；runtime.GOOS 返回当前的操作系统。
 	sysType := runtime.GOOS
 	// fmt.Println(fmt.Sprintf("您的系统是%v，采用%v架构", runtime.GOOS, runtime.GOARCH))

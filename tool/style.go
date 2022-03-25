@@ -50,6 +50,6 @@ func NameStyle(name string, path string) {
 	// 判断文件或文件夹是否存在
 	_, err := os.Stat(path)
 	if err != nil {
-		log.Fatalln("😭 文件或文件夹不存在！")
+		log.Fatalln("😭 文件夹不存在！")
 	}
 }
