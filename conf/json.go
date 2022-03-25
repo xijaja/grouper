@@ -27,6 +27,12 @@ func init() {
 	DataInfo = ReadData() // 初始化配置信息
 }
 
+// RereadDataInfo 重新读取配置参数
+func RereadDataInfo() *Data {
+	DataInfo = ReadData() // 初始化配置信息
+	return ReadData()
+}
+
 // ---------------------------------------------
 // 配置参数结构体
 // ---------------------------------------------

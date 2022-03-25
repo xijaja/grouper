@@ -51,7 +51,7 @@ func init() {
 
 // 循环更新读取数据
 func cyclicUpdate() {
-	data = conf.DataInfo            // json配置信息（再次读取时数据在内存中，无需从配置文件获取）
+	data = conf.RereadDataInfo()    // json配置信息（再次读取时数据在内存中，无需从配置文件获取）
 	ali = data.UpService.AliyunOss  // 阿里云oss的配置参数
 	ten = data.UpService.TencentCos // 腾讯云cos的配置参数
 	qin = data.UpService.QiniuOss   // 七牛云oss的配置参数
