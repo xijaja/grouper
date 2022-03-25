@@ -185,6 +185,7 @@ func setUps(any any) []g.Widget {
 						g.Msgbox("保存成功", "已完成对产业链路的赋能升级").Buttons(g.MsgboxButtonsOk).ResultCallback(func(result g.DialogResult) {
 							if result {
 								isSetUpTen = false // 关闭窗口
+								isCyclic = true    // 重新读取配置信息
 							}
 						})
 					}),
@@ -207,6 +208,7 @@ func setUps(any any) []g.Widget {
 						g.Msgbox("保存成功", "已完成对产业链路的赋能升级").Buttons(g.MsgboxButtonsOk).ResultCallback(func(result g.DialogResult) {
 							if result {
 								isSetUpQin = false // 关闭窗口
+								isCyclic = true    // 重新读取配置信息
 							}
 						})
 					}),
