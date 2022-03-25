@@ -17,6 +17,7 @@ uper.yaml
 uper
 *.zip
 *.json
+*.app/
 
 # 其他
 .DS_Store
