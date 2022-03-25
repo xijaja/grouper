@@ -80,7 +80,7 @@ func addr(name string, upType string) (addr string) {
 	}
 }
 
-// 服务
+// 上传服务，绑定对应的配置
 func upServer(upType string) any {
 	switch upType {
 	case "阿里云OSS":
@@ -91,6 +91,29 @@ func upServer(upType string) any {
 		return qin
 	default:
 		return ali
+	}
+}
+
+// 点击上传时，判断对应配置是否完整
+func checkupServerConfig(upType string) (isComplete bool) {
+	switch upType {
+	case "阿里云OSS":
+		if ali.KeyID == "" || ali.KeySecret == "" || ali.Endpoint == "" || ali.BucketName == "" {
+			return false
+		}
+		return true
+	case "腾讯云COS":
+		if ten.BucketName == "" || ten.SecretID == "" || ten.SecretKey == "" || ten.CosRegion == "" {
+			return false
+		}
+		return true
+	case "七牛云OSS":
+		if qin.BucketName == "" || qin.AccessKey == "" || qin.SecretKey == "" {
+			return false
+		}
+		return true
+	default:
+		return false
 	}
 }
 

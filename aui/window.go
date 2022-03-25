@@ -40,7 +40,13 @@ func projectList(p *conf.Project) *g.TreeNodeWidget {
 				}
 				// 一个新的上传任务
 				g.Msgbox("上传项目", "开始打通领域闭环！").Buttons(g.MsgboxButtonsOkCancel).ResultCallback(func(result g.DialogResult) {
+					// 点击了"OK"
 					if result {
+						// 判断配置文件数据是否完整，如果不完整则提示
+						if !checkupServerConfig(p.UpType) {
+							g.Msgbox("对应上传服务的配置不完整", "犹豫就会败北，现在就去【设置】中配置").Buttons(g.MsgboxButtonsOk)
+							return // 从此处返回，防止程序崩溃报错
+						}
 						// 通过回调获悉，开始上传
 						fmt.Println("开始上传……")
 						var wg sync.WaitGroup

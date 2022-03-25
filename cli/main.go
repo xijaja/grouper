@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"grouper/app"
 	"grouper/conf"
 	"grouper/tool"
 	"os"
@@ -40,19 +39,20 @@ func main() {
 	// 规范名称
 	name := *N
 	if name == "" {
-		// 没有名字则拆分链接最后一个单词
 		arr := strings.Split(path, "/")
-		// 为名字加上斜杠用以命名上传后的文件夹
-		name = arr[len(arr)-2 : len(arr)-1][0] + "/"
-	}
+		name = arr[len(arr)-2 : len(arr)-1][0]
+	} // 没有名字则拆分链接最后一个单词
 	tool.NameStyle(name, path) // 检查命名是否符合规范，文件夹是否存在
+	name += "/"                // 为名字加上斜杠用以命名上传后的文件夹
 	// 遍历文件并上传
 	pj := conf.Project{
 		Name:      name,
 		UpType:    "阿里云OSS",
 		LocalFile: path,
 	}
-	ups := conf.DataInfo.UpService.AliyunOss
+	upload := conf.DataInfo.UpService.AliyunOss
+	fmt.Println(pj)
+	fmt.Println(upload)
 	// 开始上传
-	app.CliUper(pj, ups)
+	// app.CliUper(pj, upload)
 }

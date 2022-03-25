@@ -4,16 +4,26 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
+	"os/user"
 )
 
 // ---------------------------------------------
 // 初始化
 // ---------------------------------------------
 
-var DataInfo *Data
+var jsonFile string // 配置文件路径
+var DataInfo *Data  // 配置信息
 
 func init() {
-	DataInfo = ReadData()
+	// 获取用户主目录 u.HomeDir
+	u, err := user.Current()
+	if err != nil {
+		log.Fatal(err)
+	}
+	jsonFile = u.HomeDir + "/.grouper.json"
+	DataInfo = ReadData() // 初始化配置信息
 }
 
 // ---------------------------------------------
@@ -67,18 +77,62 @@ type Data struct {
 // 读取配置
 // ---------------------------------------------
 
-var jsonFile = "../conf/grouper.json" // 配置文件路径
-
 // ReadData 读取配置
 func ReadData() *Data {
-	// 读取json文件 todo 根据系统不同，如果没有则自动创建至特定目录
+	// 判断是否存在配置文件
+	_, err := os.Stat(jsonFile)
+	// 如果不存在则写入后再读取
+	if os.IsNotExist(err) {
+		dataBytes := `{
+			"projects": [
+				{
+					"name": "test1",
+					"up_type": "阿里云OSS",
+					"local_file": "/您的主目录/您的子目录/同名文件夹test1"
+				},
+				{
+					"name": "test2",
+					"up_type": "阿里云OSS",
+					"local_file": "/您的主目录/您的子目录/同名文件夹test2"
+				}
+			],
+			"up_service": {
+				"tencent_cos": {
+					"bucket_name": "",
+					"cos_region": "",
+					"secret_id": "",
+					"secret_key": "",
+					"domain": ""
+				},
+				"aliyun_oss": {
+					"endpoint": "",
+					"key_id": "",
+					"key_secret": "",
+					"bucket_name": "",
+					"domain": ""
+				},
+				"qiniu_oss": {
+					"access_key": "",
+					"secret_key": "",
+					"bucket_name": "",
+					"domain": ""
+				}
+			}
+		}`
+		// fmt.Println("dataBytes:", dataBytes)
+		_ = ioutil.WriteFile(jsonFile, []byte(dataBytes), 0666)
+	}
+	// 否则直接读取json文件
 	jsonData, err := ioutil.ReadFile(jsonFile)
 	if err != nil {
-		fmt.Println("打开配置文件报错：", err)
+		log.Fatal("打开配置文件报错：", err)
 	}
 	// 绑定到结构体
 	var info Data
 	err = json.Unmarshal(jsonData, &info)
+	if err != nil {
+		log.Fatal("数据错误：", err)
+	}
 	return &info
 }
 
@@ -123,6 +177,7 @@ func (p *Project) UpdateOneProject() {
 	resetJsonFile()
 }
 
+// DeleteOneProject 删除一个项目
 func (p *Project) DeleteOneProject() {
 	var num int
 	for i := 0; i < len(DataInfo.Projects); i++ {
