@@ -41,10 +41,11 @@ Grouper 是一个将本地某个特定的文件夹上传到云oss存储的服务
 第一步：下载并安装
 1. 你可以选择 [点击这里](https://github.com/xiwuou/grouper/releases/tag/v1.0.0-beta) 下载你所需的程序。
 2. 或者也可以自行编译程序，请继续阅读 编译。
+3. 包体：Windows 版仅 3.8M ，Mac和Linux版为 9.7M。
 
 第二步：注册云账户
 1. 目前支持 [阿里云](https://www.aliyun.com) [腾讯云](https://cloud.tencent.com) [七牛云](https://www.qiniu.com) 
-2. 注册完成拿到对应的字段资料，可以[参考教程]()
+2. 注册完成拿到对应的字段资料，可以[参考教程](https://mp.weixin.qq.com/s/5mP1bFa7tLTjXKwvLeD2eQ)
 
 第三步：开始上传
 1. 在 Grouper 的`设置`中选择你使用的服务，如`阿里云OSS`，并将配置参数填入。
@@ -106,6 +107,8 @@ c. 你可以将程序放置在你的`/usr/bin`或`/usr/local/bin`目录下，之
 <img src="https://axure.occo.pro/pm_xiwu.png" width="220" alt="我的个人微信"/> <img src="https://axure.occo.pro/pmgouzi.jpg" width="229" alt="微信公众号：逆天思维产品汪"/>
 
 ## 🫡 感谢
+🙏 女盆友 提供的 icon 支持
+
 🙏 UI支持 `github.com/AllenDang/giu` 
 
 🙏 并发支持`github.com/panjf2000/ants`
