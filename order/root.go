@@ -11,7 +11,9 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "grouper",
 	Short: "grouper 的简要说明",
-	Long:  "您现在使用的 grouper 是命令行版，可使用 grouper --help 查看帮助",
+	Long: "grouper:" +
+		"    旨在向您提供 axure 等静态文件托管到 oss 的服务，\n" +
+		"    您现在使用的是命令行版，可使用 grouper --help 查看帮助。",
 	Run: func(cmd *cobra.Command, args []string) {
 		_ = cmd.Help()
 	},

@@ -9,52 +9,24 @@ import (
 )
 
 type qiniuOss struct {
-	upToken string
+	qnCfg *conf.QiniuOss
 }
 
 // QiniuGetUpToken 获取上传token
-func QiniuGetUpToken(qnCfg conf.QiniuOss) *qiniuOss {
-	// 文件上传的上传策略
-	putPolicy := storage.PutPolicy{
-		Scope: qnCfg.BucketName, // 简单策略
-	}
-	mac := qbox.NewMac(qnCfg.AccessKey, qnCfg.SecretKey)
-	upToken := putPolicy.UploadToken(mac)
-	return &qiniuOss{upToken: upToken}
-}
-
-// QiniuGoUpload 上传
-func (qn *qiniuOss) QiniuGoUpload(couldFile, localFile string) {
-	// 文件上传，资源管理等配置
-	cfg := storage.Config{}
-
-	// 构建表单上传的对象
-	formUploader := storage.NewFormUploader(&cfg)
-	ret := storage.PutRet{}
-
-	// 可选配置
-	putExtra := storage.PutExtra{
-		// Params: map[string]string{
-		// 	"x:name": "github logo",
-		// },
-	}
-
-	// 开始上传
-	err := formUploader.PutFile(context.Background(), &ret, qn.upToken, couldFile, localFile, &putExtra)
-	if err != nil {
-		fmt.Println(err)
-		return
+func QiniuGetUpToken(qin conf.QiniuOss) *qiniuOss {
+	return &qiniuOss{
+		qnCfg: &qin,
 	}
 }
 
 // QiniuCoverUpload 七牛云上传
-func QiniuCoverUpload(qnCfg conf.QiniuOss, couldFile, localFile string) {
+func (qn *qiniuOss) QiniuCoverUpload(couldFile, localFile string) {
 	// 需要覆盖的文件名
 	keyToOverwrite := couldFile
 	putPolicy := storage.PutPolicy{
-		Scope: fmt.Sprintf("%s:%s", qnCfg.BucketName, keyToOverwrite),
+		Scope: fmt.Sprintf("%s:%s", qn.qnCfg.BucketName, keyToOverwrite),
 	}
-	mac := qbox.NewMac(qnCfg.AccessKey, qnCfg.SecretKey)
+	mac := qbox.NewMac(qn.qnCfg.AccessKey, qn.qnCfg.SecretKey)
 	upToken := putPolicy.UploadToken(mac)
 	// 文件上传，资源管理等配置
 	cfg := storage.Config{}

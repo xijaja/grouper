@@ -95,12 +95,11 @@ func Grouper(project conf.Project, upServer any, f func(n1, n2 int)) (num int, a
 		domain = tx.Domain
 	case "七牛云OSS":
 		qin := upServer.(conf.QiniuOss)
-		// upt := osser.QiniuGetUpToken(qin) // 获取七牛云上传Token
+		upt := osser.QiniuGetUpToken(qin) // 获取七牛云上传Token
 		p, _ := ants.NewPoolWithFunc(totalPool(fileNum), func(i interface{}) {
 			newPath := i.(string)
 			couldFile, localFile := name+newPath[len(dirPth):], newPath
-			// upt.QiniuGoUpload(couldFile, localFile) // 开始上传
-			osser.QiniuCoverUpload(qin, couldFile, localFile)
+			upt.QiniuCoverUpload(couldFile, localFile) // 开始上传
 			wg.Done()
 		}) // 并发任务
 		defer p.Release() // 释放并发

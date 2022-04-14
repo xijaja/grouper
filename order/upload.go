@@ -12,7 +12,8 @@ import (
 var upCmd = &cobra.Command{
 	Use:   "up [flags][name][path]",
 	Short: "上传服务",
-	Long:  "",
+	Long: "上传服务，示例:\n" +
+		"    grouper up -qn myprd -p /Users/xiwu/Documents/Axure/MyDemo/myprd\n",
 	Run: func(cmd *cobra.Command, args []string) {
 		qiniu, _ := cmd.Flags().GetBool("qiniu")
 		aliyun, _ := cmd.Flags().GetBool("aliyun")
