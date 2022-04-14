@@ -19,7 +19,6 @@ var upCmd = &cobra.Command{
 		tencent, _ := cmd.Flags().GetBool("tencent")
 		name, _ := cmd.Flags().GetString("name")
 		path, _ := cmd.Flags().GetString("path")
-		// detail, _ := cmd.Flags().GetBool("detail")
 		if !qiniu && !aliyun && !tencent || name == "" {
 			_ = cmd.Help()
 		} // 如果没有选择任何一个，则提示帮助信息
@@ -75,5 +74,4 @@ func init() {
 	upCmd.Flags().BoolP("tencent", "t", false, "上传到腾讯云")
 	upCmd.Flags().StringP("name", "n", "", "项目名称,应为文件夹名称")
 	upCmd.Flags().StringP("path", "p", ".", "本地文件路径")
-	upCmd.Flags().BoolP("detail", "d", false, "显示详细上传信息")
 }
