@@ -50,8 +50,7 @@ func (qn *qiniuOss) QiniuGoUpload(couldFile, localFile string) {
 // QiniuCoverUpload 七牛云上传
 func QiniuCoverUpload(qnCfg conf.QiniuOss, couldFile, localFile string) {
 	// 需要覆盖的文件名
-	j := len("/Users/xiwu/Documents/Axure/MyDemo/")
-	keyToOverwrite := localFile[j:]
+	keyToOverwrite := couldFile
 	putPolicy := storage.PutPolicy{
 		Scope: fmt.Sprintf("%s:%s", qnCfg.BucketName, keyToOverwrite),
 	}

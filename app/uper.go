@@ -29,7 +29,7 @@ func CliUper(project conf.Project, upServer any) {
 	})
 	bar.Finish() // 结束进度条
 	// 执行结束
-	fmt.Printf("🪖 报告长官， %v 个文件上传成功，访问地址为：%v/\n", num, addr)
+	fmt.Printf("🪖 报告长官， %v 个文件上传成功，访问地址为：%v/index.html\n", num, addr)
 	fmt.Println("ps: 如果您上传的并非网页文件或图片，可能无法访问哟～")
 	// 结束退出
 	if !tool.IsOsWindows() {
@@ -138,9 +138,11 @@ func totalPool(num int) (total int) {
 		return 64
 	case 5001 <= num && num <= 10000:
 		return 128
-	case 10001 <= num && num <= 25000:
+	case 10001 <= num && num <= 20000:
+		return 256
+	case 20001 <= num && num <= 45000:
 		return 512
-	case 25000 <= num:
+	case 45001 <= num:
 		return 1024
 	default:
 		return 1

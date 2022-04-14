@@ -22,17 +22,17 @@ var upCmd = &cobra.Command{
 		if !qiniu && !aliyun && !tencent || name == "" {
 			_ = cmd.Help()
 		} // 如果没有选择任何一个，则提示帮助信息
-		// 规范路径
+		// 如果没有指定项目名称和路径，则提示帮助信息
 		if name == "" && path == "" {
 			cmd.Println("项目名称和路径，均为空")
 			_ = cmd.Help()
 		}
-		if len(path) == 1 && path[len(path)-1:] == "/" {
+		// 如果指定项目名称，但是没有指定路径，则为当前路径
+		if len(path) == 1 {
 			// path = path[:len(path)-1] // 去掉最后一个"/"
-			path += "/"
+			path = name // 如果没有指定路径，则默认为项目名称
 		}
-
-		// 规范名称，如果没有指定，则使用路径的最后一个文件夹名
+		// 如果指定了路径，但是没有指定项目名称，则使用路径的最后一个文件夹名
 		if name == "" && path != "" {
 			arr := strings.Split(path, "/")
 			name = arr[len(arr)-2 : len(arr)-1][0]
@@ -47,16 +47,19 @@ var upCmd = &cobra.Command{
 		if qiniu {
 			pj.UpType = "七牛云OSS"
 			upload := conf.DataInfo.UpService.QiniuOss
+			cmd.Println("正在扫描本地文件，准备上传到七牛云OSS...")
 			app.CliUper(pj, upload)
 			// fmt.Printf("项目信息：%+v\n", pj)     // 打印键值对
 			// fmt.Printf("上传信息：%+v\n", upload) // 打印键值对
 		} else if aliyun {
 			pj.UpType = "阿里云OSS"
 			upload := conf.DataInfo.UpService.AliyunOss
+			cmd.Println("正在扫描本地文件，准备上传到阿里云OSS...")
 			app.CliUper(pj, upload)
 		} else if tencent {
 			pj.UpType = "腾讯云COS"
 			upload := conf.DataInfo.UpService.TencentCos
+			cmd.Println("正在扫描本地文件，准备上传到腾讯云COS...")
 			app.CliUper(pj, upload)
 		} else {
 			_ = cmd.Help()

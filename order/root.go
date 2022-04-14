@@ -10,8 +10,8 @@ import (
 // 根命令
 var rootCmd = &cobra.Command{
 	Use:   "grouper",
-	Short: "我的应用程序的简要说明",
-	Long:  "cliapp是利用Cobra(Go的CLI库)及Golang开发的命令行应用程序",
+	Short: "grouper 的简要说明",
+	Long:  "您现在使用的 grouper 是命令行版，可使用 grouper --help 查看帮助",
 	Run: func(cmd *cobra.Command, args []string) {
 		_ = cmd.Help()
 	},
