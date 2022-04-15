@@ -45,7 +45,8 @@ func CliUper(project conf.Project, upServer any) {
 // Grouper 是GUI版
 // ---------------------------------------------
 func Grouper(project conf.Project, upServer any, f func(n1, n2 int)) (num int, addr string) {
-	dirPth, name := project.LocalFile, project.Name
+	dirPth, name := project.LocalFile, project.Name // 获取本地文件路径和文件名
+	// fmt.Println("dirPth:", dirPth, "name:", name)
 	newPathList := tool.GetFileList(dirPth) // 遍历本地指定的文件夹，文件路径列表
 	fileNum := len(newPathList)             // 文件总数
 	fmt.Println("扫描完成，开始上传：")
@@ -95,18 +96,18 @@ func Grouper(project conf.Project, upServer any, f func(n1, n2 int)) (num int, a
 		domain = tx.Domain
 	case "七牛云OSS":
 		qin := upServer.(conf.QiniuOss)
-		// upt := osser.QiniuGetUpToken(qin) // 获取七牛云上传Token
+		upt := osser.QiniuGetUpToken(qin) // 获取七牛云句柄
 		p, _ := ants.NewPoolWithFunc(totalPool(fileNum), func(i interface{}) {
-			newPath := i.(string)
+			newPath := i.(string) // 文件路径，断言 i 是 string 类型
 			couldFile, localFile := name+newPath[len(dirPth):], newPath
-			// upt.QiniuGoUpload(couldFile, localFile) // 开始上传
-			osser.QiniuCoverUpload(qin, couldFile, localFile)
+			// fmt.Println("couldFile:", couldFile, "localFile", localFile)
+			upt.QiniuCoverUpload(couldFile, localFile) // 开始上传
 			wg.Done()
-		}) // 并发任务
+		}) // 并发任务：传入并发量和任务函数
 		defer p.Release() // 释放并发
 		for _, newPath := range newPathList {
 			wg.Add(1)
-			_ = p.Invoke(newPath) // 执行上传
+			_ = p.Invoke(newPath) // 执行上传，这是 func(i interface{}) 的参数
 			if total <= fileNum {
 				total++           // 计数
 				f(total, fileNum) // 进度回调
