@@ -76,7 +76,7 @@ type Data struct {
 	UpService struct {
 		TencentCos TencentCos `json:"tencent_cos"` // 腾讯云对象储存cos配置
 		AliyunOss  AliyunOss  `json:"aliyun_oss"`  // 阿里云对象储存oss配置
-		QiniuOss   QiniuOss   `json:"qiniu_oss"`   // 七牛云对象储存oss配置（还没有完成，暂时不可用）
+		QiniuOss   QiniuOss   `json:"qiniu_oss"`   // 七牛云对象储存oss配置
 	} `json:"up_service"`
 }
 

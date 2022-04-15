@@ -10,7 +10,7 @@ import (
 
 // up 命令
 var upCmd = &cobra.Command{
-	Use:   "up [flags][name][path]",
+	Use:   "upload [flags][name][path]",
 	Short: "上传服务",
 	Long: "上传服务，示例:\n" +
 		"    grouper up -qn myprd -p /Users/xiwu/Documents/Axure/MyDemo/myprd\n",
@@ -29,7 +29,7 @@ var upCmd = &cobra.Command{
 			_ = cmd.Help()
 		}
 		// 如果指定项目名称，但是没有指定路径，则为当前路径
-		if len(path) == 1 {
+		if len(path) == 1 && path[0] == '.' {
 			// path = path[:len(path)-1] // 去掉最后一个"/"
 			path = name // 如果没有指定路径，则默认为项目名称
 		}
