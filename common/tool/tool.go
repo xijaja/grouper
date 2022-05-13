@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -25,7 +26,12 @@ func GetFileList(path string) (newPathList []string) {
 		newPathList = append(newPathList, newPath)
 	})
 	// 等待遍历结束
+RE:
+	length := len(newPathList)
 	time.Sleep(2 * time.Second)
+	for len(newPathList) != length {
+		goto RE
+	}
 	return newPathList
 }
 
@@ -37,7 +43,14 @@ func iterateOverFiles(path string, up func(newPath string)) {
 	for _, file := range fs {
 		if file.IsDir() {
 			// 遇到文件夹时就开启一个并发递归
-			go iterateOverFiles(path+file.Name()+"/", up)
+			// go iterateOverFiles(path+file.Name()+"/", up)
+			var wg sync.WaitGroup
+			wg.Add(1)
+			go func() {
+				iterateOverFiles(path+file.Name()+"/", up)
+				wg.Done()
+			}()
+			wg.Wait()
 		} else {
 			newPath := path + file.Name()
 			// fmt.Println("扫描: ", path[:len(path)-1])

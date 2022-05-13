@@ -2,7 +2,7 @@ package main
 
 import (
 	g "github.com/AllenDang/giu"
-	"grouper/aui"
+	"grouper/common/aui"
 )
 
 // 程序入口

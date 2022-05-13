@@ -3,7 +3,7 @@ package order
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"grouper/conf"
+	"grouper/common/conf"
 	"os"
 )
 
@@ -11,13 +11,13 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "grouper",
 	Short: "grouper 的简要说明",
-	Long: "grouper:" +
+	Long: "grouper:\n" +
 		"    旨在向您提供 axure 等静态文件托管到 oss 的服务，\n" +
 		"    您现在使用的是命令行版，可使用 grouper --help 查看帮助。",
 	Run: func(cmd *cobra.Command, args []string) {
 		_ = cmd.Help()
 	},
-	Version: "1.0.0",
+	Version: conf.Version,
 }
 
 // 帮助命令
@@ -48,9 +48,15 @@ func init() {
 	rootCmd.SetVersionTemplate(fmt.Sprintf(
 		"版本号：%v\n"+
 			"开发者：習武（公众号：逆天思维产品汪）\n"+
-			"使用说明：xxx.xxx\n"+
 			"Github地址：https://github.com/xiwuou/uper\n"+
 			"感谢Star 🌟  欢迎Fork 👏\n", conf.Version,
 	),
 	)
 }
+
+/*
+命令结构
+grouper <command> [<args>...]
+	|- -h --help 帮助信息
+	|- -v --version 版本信息
+*/

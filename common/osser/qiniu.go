@@ -6,7 +6,7 @@ import (
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/sms/rpc"
 	"github.com/qiniu/go-sdk/v7/storage"
-	"grouper/conf"
+	"grouper/common/conf"
 	"strings"
 )
 

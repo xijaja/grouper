@@ -2,7 +2,7 @@ package aui
 
 import (
 	g "github.com/AllenDang/giu"
-	"grouper/conf"
+	"grouper/common/conf"
 )
 
 // 获取配置信息

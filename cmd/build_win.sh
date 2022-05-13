@@ -1,6 +1,6 @@
 cat > grouper.rc << EOL
-id ICON "../resource/app.ico"
-GLFW_ICON ICON "../resource/app.ico"
+id ICON "../common/resource/app.ico"
+GLFW_ICON ICON "../common/resource/app.ico"
 EOL
 
 #x86_64-w64-mingw32-windres grouper.rc -O coff -o grouper.syso

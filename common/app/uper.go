@@ -3,9 +3,9 @@ package app
 import (
 	"fmt"
 	"github.com/panjf2000/ants/v2"
-	"grouper/conf"
-	"grouper/osser"
-	"grouper/tool"
+	"grouper/common/conf"
+	"grouper/common/osser"
+	"grouper/common/tool"
 	"log"
 	"sync"
 	"time"

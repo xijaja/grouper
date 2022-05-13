@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/tencentyun/cos-go-sdk-v5"
-	"grouper/conf"
+	"grouper/common/conf"
 	"net/http"
 	"net/url"
 )

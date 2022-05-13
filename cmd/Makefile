@@ -4,7 +4,7 @@ all:
 
 default:
 	go build -o main main.go
-	appify -name "grouper" -icon ../resource/app.png main
+	appify -name "grouper" -icon ../common/resource/app.png main
 	rm -rf main
 
 windows:
