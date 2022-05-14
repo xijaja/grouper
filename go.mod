@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/AllenDang/giu v0.6.1
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.1+incompatible
+	github.com/gookit/color v1.5.0
 	github.com/panjf2000/ants/v2 v2.4.8
 	github.com/qiniu/go-sdk/v7 v7.11.1
 	github.com/spf13/cobra v1.4.0
@@ -28,6 +29,7 @@ require (
 	github.com/sahilm/fuzzy v0.1.0 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
 	golang.org/x/image v0.0.0-20210628002857-a66eb6448b8d // indirect
 	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a // indirect

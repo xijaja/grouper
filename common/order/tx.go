@@ -2,6 +2,7 @@ package order
 
 import (
 	"fmt"
+	"github.com/gookit/color"
 	"github.com/spf13/cobra"
 	"grouper/common/app"
 	"grouper/common/conf"
@@ -28,9 +29,12 @@ var txCmd = &cobra.Command{
 			list := cos.ObjList()
 			for _, v := range list {
 				if v.Types == 0 {
-					fmt.Printf("文件: %v    -> 地址：%v\n", v.Object, tx.Domain+"/"+v.Object)
+					fmt.Printf("文件: %v    -> 地址: ", v.Object)
+					color.Blueln(tx.Domain + "/" + v.Object)
 				} else {
-					fmt.Printf("目录: %v    -> 地址: %v\n", v.Object, tx.Domain+"/"+v.Object+"index.html")
+					fmt.Printf("目录: %v    -> 地址: ", v.Object)
+					color.Blueln(tx.Domain + "/" + v.Object + "index.html")
+					// fmt.Printf("目录: %v    -> 地址: %v\n", v.Object, tx.Domain+"/"+v.Object+"index.html")
 				}
 			}
 		} else if upload {
@@ -51,7 +55,7 @@ var txCmd = &cobra.Command{
 			}
 			tool.NameStyle(name, path) // 检查命名是否符合规范，文件夹是否存在
 			// 开始上传
-			cmd.Println("正在扫描本地文件，准备上传到阿里云OSS...")
+			cmd.Println("正在扫描本地文件，准备上传到腾讯云 COS ...")
 			app.CliUper(conf.Project{
 				Name:      name,     // 项目名称
 				LocalFile: path,     // 本地项目路径

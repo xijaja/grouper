@@ -56,7 +56,7 @@ var qnCmd = &cobra.Command{
 			}
 			tool.NameStyle(name, path) // 检查命名是否符合规范，文件夹是否存在
 			// 开始上传
-			cmd.Println("正在扫描本地文件，准备上传到阿里云OSS...")
+			cmd.Println("正在扫描本地文件，准备上传七牛云 OSS ...")
 			app.CliUper(conf.Project{
 				Name:      name,     // 项目名称
 				LocalFile: path,     // 本地项目路径

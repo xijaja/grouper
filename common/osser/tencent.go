@@ -3,6 +3,7 @@ package osser
 import (
 	"context"
 	"fmt"
+	"github.com/gookit/color"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"grouper/common/conf"
 	"net/http"
@@ -98,11 +99,11 @@ func (tx *tencentCos) ObjDelete(key string) (ok bool) {
 	// 查询对象是否存在
 	ok, err := tx.client.Object.IsExist(context.Background(), key)
 	if err != nil {
-		fmt.Println("删除文件失败：", err)
+		color.Redln("删除文件失败：", err)
 		return false
 	}
 	if !ok {
-		fmt.Println("文件或项目不存在：", key)
+		color.Redln("文件或项目不存在：", key)
 		return false
 	}
 
@@ -120,13 +121,13 @@ func (tx *tencentCos) ObjDelete(key string) (ok bool) {
 			opt.Marker = marker
 			v, _, err := tx.client.Bucket.Get(context.Background(), opt)
 			if err != nil {
-				fmt.Println(err)
+				color.Cyanln(err)
 				break
 			}
 			for _, content := range v.Contents {
 				_, err = tx.client.Object.Delete(context.Background(), content.Key)
 				if err != nil {
-					fmt.Println(err)
+					color.Cyanln(err)
 				}
 			}
 			isTruncated = v.IsTruncated
@@ -136,7 +137,7 @@ func (tx *tencentCos) ObjDelete(key string) (ok bool) {
 		// 否则是文件
 		_, err := tx.client.Object.Delete(context.Background(), key)
 		if err != nil {
-			fmt.Println(err)
+			color.Cyanln(err)
 			return false
 		}
 	}
