@@ -48,7 +48,7 @@ func init() {
 	rootCmd.SetVersionTemplate(fmt.Sprintf(
 		"版本号：%v\n"+
 			"开发者：習武（公众号：逆天思维产品汪）\n"+
-			"Github地址：https://github.com/xiwuou/uper\n"+
+			"Github地址：https://github.com/xiwuou/grouper\n"+
 			"感谢Star 🌟  欢迎Fork 👏\n", conf.Version,
 	),
 	)

@@ -3,6 +3,7 @@ package osser
 import (
 	"context"
 	"fmt"
+	"github.com/gookit/color"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"grouper/common/conf"
 	"net/http"
@@ -95,20 +96,15 @@ type TencentCosFile struct {
 
 // ObjDelete 删除腾讯云 cos 文件
 func (tx *tencentCos) ObjDelete(key string) (ok bool) {
-	// 查询对象是否存在
-	ok, err := tx.client.Object.IsExist(context.Background(), key)
-	if err != nil {
-		fmt.Println("删除文件失败：", err)
-		return false
-	}
-	if !ok {
-		fmt.Println("文件或项目不存在：", key)
-		return false
-	}
-
-	// 开始删除
-	fmt.Printf("正在删除腾讯云 cos 上的 %v ，请稍候～\n", key)
 	if key[len(key)-1] == '/' {
+		// 查询对象是否存在
+		have, _ := tx.isHave(key + "/index.html")
+		if !have {
+			color.Redln("项目不存在：", key)
+			return false
+		}
+		// 开始删除对象
+		fmt.Printf("正在删除腾讯云 cos 上的 %v 项目，请稍候～\n", key)
 		// 表示是文件夹
 		var marker string
 		opt := &cos.BucketGetOptions{
@@ -120,25 +116,38 @@ func (tx *tencentCos) ObjDelete(key string) (ok bool) {
 			opt.Marker = marker
 			v, _, err := tx.client.Bucket.Get(context.Background(), opt)
 			if err != nil {
-				fmt.Println(err)
+				color.Cyanln(err)
 				break
 			}
 			for _, content := range v.Contents {
 				_, err = tx.client.Object.Delete(context.Background(), content.Key)
 				if err != nil {
-					fmt.Println(err)
+					color.Cyanln(err)
 				}
 			}
 			isTruncated = v.IsTruncated
 			marker = v.NextMarker
 		}
 	} else {
-		// 否则是文件
+		// 否则是文件，查询对象是否存在
+		have, _ := tx.isHave(key)
+		if !have {
+			color.Redln("文件不存在：", key)
+			return false
+		}
+		// 开始删除对象
+		fmt.Printf("正在删除腾讯云 cos 上的 %v 文件...\n", key)
+
 		_, err := tx.client.Object.Delete(context.Background(), key)
 		if err != nil {
-			fmt.Println(err)
+			color.Cyanln(err)
 			return false
 		}
 	}
 	return true
+}
+
+// 查看文件或项目是否存在
+func (tx *tencentCos) isHave(key string) (ok bool, err error) {
+	return tx.client.Object.IsExist(context.Background(), key)
 }
