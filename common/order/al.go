@@ -21,6 +21,7 @@ var alCmd = &cobra.Command{
 
 		if list {
 			// 查看项目列表
+			cmd.Println("阿里云OSS查看项目列表，grouper 暂未支持")
 		} else if upload {
 			// 上传项目
 			// 如果没有指定项目名称和路径，则提示帮助信息
@@ -47,6 +48,7 @@ var alCmd = &cobra.Command{
 			}, conf.DataInfo.UpService.AliyunOss)
 		} else if del {
 			// 删除项目
+			cmd.Println("阿里云OSS删除项目，grouper 暂未支持")
 		} else {
 			// 无效的命令
 			_ = cmd.Help()

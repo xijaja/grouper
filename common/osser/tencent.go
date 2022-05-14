@@ -9,6 +9,10 @@ import (
 	"net/url"
 )
 
+// ---------------------------------------------
+// 上传
+// ---------------------------------------------
+
 type tencentCos struct {
 	client *cos.Client
 }
@@ -45,6 +49,96 @@ func (tx *tencentCos) Upload(key, file string) (ok bool) {
 	// 处理错误
 	if err != nil {
 		panic(err)
+	}
+	return true
+}
+
+// ---------------------------------------------
+// 文件管理
+// ---------------------------------------------
+
+// ObjList 获取腾讯云 cos 文件列表
+func (tx *tencentCos) ObjList() (list []TencentCosFile) {
+	opt := &cos.BucketGetOptions{
+		Prefix:    "",
+		Delimiter: "/",
+		MaxKeys:   100,
+	}
+	result, _, err := tx.client.Bucket.Get(context.Background(), opt)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for _, content := range result.Contents {
+		// fmt.Printf("文件: %v\n", content.Key)
+		list = append(list, TencentCosFile{
+			Object: content.Key,
+			Types:  0,
+		})
+	}
+	// common prefix表示表示被delimiter截断的路径, common prefix则表示所有子目录的路径
+	for _, commonPrefix := range result.CommonPrefixes {
+		// fmt.Printf("项目: %v\n", commonPrefix)
+		list = append(list, TencentCosFile{
+			Object: commonPrefix,
+			Types:  1,
+		})
+	}
+	return list
+}
+
+// TencentCosFile 腾讯云 cos 文件列表
+type TencentCosFile struct {
+	Object string // 文件名
+	Types  int    // 0: 文件 1: 项目
+}
+
+// ObjDelete 删除腾讯云 cos 文件
+func (tx *tencentCos) ObjDelete(key string) (ok bool) {
+	// 查询对象是否存在
+	ok, err := tx.client.Object.IsExist(context.Background(), key)
+	if err != nil {
+		fmt.Println("删除文件失败：", err)
+		return false
+	}
+	if !ok {
+		fmt.Println("文件或项目不存在：", key)
+		return false
+	}
+
+	// 开始删除
+	fmt.Printf("正在删除腾讯云 cos 上的 %v ，请稍候～\n", key)
+	if key[len(key)-1] == '/' {
+		// 表示是文件夹
+		var marker string
+		opt := &cos.BucketGetOptions{
+			Prefix:  key,
+			MaxKeys: 1000,
+		}
+		isTruncated := true
+		for isTruncated {
+			opt.Marker = marker
+			v, _, err := tx.client.Bucket.Get(context.Background(), opt)
+			if err != nil {
+				fmt.Println(err)
+				break
+			}
+			for _, content := range v.Contents {
+				_, err = tx.client.Object.Delete(context.Background(), content.Key)
+				if err != nil {
+					fmt.Println(err)
+				}
+			}
+			isTruncated = v.IsTruncated
+			marker = v.NextMarker
+		}
+	} else {
+		// 否则是文件
+		_, err := tx.client.Object.Delete(context.Background(), key)
+		if err != nil {
+			fmt.Println(err)
+			return false
+		}
 	}
 	return true
 }

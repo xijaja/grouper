@@ -1,9 +1,11 @@
 package order
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"grouper/common/app"
 	"grouper/common/conf"
+	"grouper/common/osser"
 	"grouper/common/tool"
 	"strings"
 )
@@ -21,6 +23,16 @@ var txCmd = &cobra.Command{
 
 		if list {
 			// 查看项目列表
+			tx := conf.DataInfo.UpService.TencentCos
+			cos := osser.CosClient(tx) // 腾讯云cos句柄
+			list := cos.ObjList()
+			for _, v := range list {
+				if v.Types == 0 {
+					fmt.Printf("文件: %v    -> 地址：%v\n", v.Object, tx.Domain+"/"+v.Object)
+				} else {
+					fmt.Printf("目录: %v    -> 地址: %v\n", v.Object, tx.Domain+"/"+v.Object+"index.html")
+				}
+			}
 		} else if upload {
 			// 上传项目
 			// 如果没有指定项目名称和路径，则提示帮助信息
@@ -47,6 +59,18 @@ var txCmd = &cobra.Command{
 			}, conf.DataInfo.UpService.TencentCos)
 		} else if del {
 			// 删除项目
+			// 如果没有指定项目名称，则提示帮助信息
+			if name == "" {
+				cmd.Println("项目或文件名称为空")
+				_ = cmd.Help()
+			}
+			// 开始删除
+			tx := conf.DataInfo.UpService.TencentCos
+			cos := osser.CosClient(tx) // 腾讯云cos句柄
+			ok := cos.ObjDelete(name)
+			if ok {
+				fmt.Printf("删除 %v 成功\n", name)
+			}
 		} else {
 			// 无效的命令
 			_ = cmd.Help()

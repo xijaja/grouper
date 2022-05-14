@@ -37,10 +37,6 @@ var qnCmd = &cobra.Command{
 			}
 			for i := 0; i < len(files); i++ {
 				cmd.Println(files[i])
-				// if i == 29 {
-				// 	cmd.Println("...\n仅显示前30个文件")
-				// 	return
-				// }
 			}
 		} else if upload {
 			// 上传项目
