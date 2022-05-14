@@ -3,7 +3,7 @@ package aui
 import (
 	"fmt"
 	g "github.com/AllenDang/giu"
-	"grouper/conf"
+	"grouper/common/conf"
 	"os"
 )
 

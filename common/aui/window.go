@@ -3,8 +3,8 @@ package aui
 import (
 	"fmt"
 	g "github.com/AllenDang/giu"
-	"grouper/app"
-	"grouper/conf"
+	"grouper/common/app"
+	"grouper/common/conf"
 	"sync"
 )
 

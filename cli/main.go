@@ -1,6 +1,6 @@
 package main
 
-import "grouper/order"
+import "grouper/common/order"
 
 func main() {
 	// CLI
