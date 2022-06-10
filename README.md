@@ -104,7 +104,7 @@ c. 你可以将程序放置在你的`/usr/bin`或`/usr/local/bin`目录下，之
 ## 🥴 开发者
 如果你想要联系到我，交个朋友或者提个需求，抑或是提个BUG。左边是我的个人微信，右边是我的公众号。
 
-<img src="https://hub.goup.run/images/pm_xiwu.png" width="220" alt="我的个人微信"/> <img src="https://hub.goup.run/images/pmgouzi.jpg" width="229" alt="微信公众号：逆天思维产品汪"/>
+<img src="https://hub.goup.run/images/pm_xiwu.jpg" width="220" alt="我的个人微信"/> <img src="https://hub.goup.run/images/pmgouzi.jpg" width="229" alt="微信公众号：逆天思维产品汪"/>
 
 ## 🫡 感谢
 🙏 女盆友 提供的 icon 支持
