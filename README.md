@@ -1,6 +1,6 @@
 
 <div align="center">
-<a href=""><img alt="Stellar" src="https://axure.occo.pro/icon25.png" width="" /></a>
+<a href=""><img alt="Stellar" src="https://hub.goup.run/images/icon25.png" width="" /></a>
 <br/>
 <strong> 原型仔之友 </strong>
 <h1>Grouper</h1>
@@ -104,7 +104,7 @@ c. 你可以将程序放置在你的`/usr/bin`或`/usr/local/bin`目录下，之
 ## 🥴 开发者
 如果你想要联系到我，交个朋友或者提个需求，抑或是提个BUG。左边是我的个人微信，右边是我的公众号。
 
-<img src="https://axure.occo.pro/pm_xiwu.png" width="220" alt="我的个人微信"/> <img src="https://axure.occo.pro/pmgouzi.jpg" width="229" alt="微信公众号：逆天思维产品汪"/>
+<img src="https://hub.goup.run/images/pm_xiwu.png" width="220" alt="我的个人微信"/> <img src="https://hub.goup.run/images/pmgouzi.jpg" width="229" alt="微信公众号：逆天思维产品汪"/>
 
 ## 🫡 感谢
 🙏 女盆友 提供的 icon 支持
